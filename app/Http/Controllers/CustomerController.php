@@ -12,22 +12,22 @@ class AdminDashboardController extends Controller
 
     public function index()
     {
-        return view('admin.dashboard');
+        return view('Admin.dashboard');
     }
     public function salesman(){
-         return view('admin.salesman');
+         return view('Admin.salesman');
     }
      public function announcements(){
-         return view('admin.announcements');
+         return view('Admin.announcements');
     }
      public function category(){
-         return view('admin.category');
+         return view('Admin.category');
     }
      public function Tickets(){
-         return view('admin.Tickets');
+         return view('Admin.Tickets');
     }
      public function customers(){
-         return view('admin.customers');
+         return view('Admin.customers');
     }
      public function get_users(){
         // View all the items
