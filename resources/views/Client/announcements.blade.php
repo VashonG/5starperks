@@ -16,7 +16,7 @@
                     <div class="d-flex justify-content-start align-items-center mb-1">
                         <!-- avatar -->
                         <div class="avatar me-1">
-                            <img src="http://127.0.0.1:8000/app-assets/images/portrait/small/avatar-s-11.jpg" alt="avatar img" height="50" width="50" />
+                            <img src="{{asset('/images/portrait/small/avatar-s-11.jpg')}}" alt="avatar img" height="50" width="50" />
                         </div>
                         <!--/ avatar -->
                         <div class="profile-user-info">

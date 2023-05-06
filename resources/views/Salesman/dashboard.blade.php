@@ -241,7 +241,7 @@
                                                         <div class="row">
                                                             <div class="col-xl-8 col-md-8 col-sm-8 col-12 pe-sm-0">
                                                                 <div class="mb-1">
-                                                                    <input type="text" class="form-control" id="copy-to-clipboard-input" value="http://127.0.0.1:8000/register?id=XHR123" />
+                                                                    <input type="text" class="form-control" id="copy-to-clipboard-input" value="{{ config('app.url') }}/register?id=XHR123" />
                                                                 </div>
                                                             </div>
                                                             <div class="col-sm-2 col-12">
