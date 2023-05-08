@@ -12,7 +12,7 @@ use DataTables;
 use App\Http\Controllers\Throwable;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
-use DB;
+use Illuminate\Support\Facades\DB;
 
 use function PHPUnit\Framework\returnSelf;
 
@@ -30,7 +30,7 @@ class AnnouncementsController extends Controller
     public function index(Request $request)
     {
 
-        $announcments =DB::table('announcements')
+        $announcments = DB::table('announcements')
         ->orderBy('updated_at', 'desc')
         ->get();
         $comments = Comment::join('users','comments.user_id','=','users.id')

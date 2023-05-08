@@ -55,8 +55,8 @@
         </li>
     @endcan
     @can('products')
-        <li class="nav-item  {{ \Route::getFacadeRoot()->current()->uri() == 'vewProducts' ? 'active' : '' }}">
-            <a  class="d-flex align-items-center"  href="{{url('vewProducts')}}">
+        <li class="nav-item  {{ \Route::getFacadeRoot()->current()->uri() == 'products' ? 'active' : '' }}">
+            <a  class="d-flex align-items-center"  href="{{url('products')}}">
                 <i data-feather="briefcase"></i>
                 <span class="menu-title text-truncate" data-i18n="Products">Products</span>
             </a>

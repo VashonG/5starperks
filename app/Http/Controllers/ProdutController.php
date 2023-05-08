@@ -2,41 +2,61 @@
 
 namespace App\Http\Controllers;
 
-use Dusterio\LinkPreview\Client;
-use Illuminate\Http\Request;
-use Spatie\Permission\Models\Role;
-use App\Models\Category;
-use Illuminate\Support\Facades\Storage;
+use Carbon\Carbon;
 use App\Models\Product;
+use App\Models\Category;
 use App\Models\Announcement;
-use Illuminate\Validation\ValidationException;
-use Mockery\Undefined;
-use Spatie\Permission\Models\Permission;
+use Illuminate\Http\Request;
+use Dusterio\LinkPreview\Client;
+use Illuminate\Support\Collection;
+use Spatie\Permission\Models\Role;
+use App\Models\ProductClickHistory;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
+use Spatie\Permission\Models\Permission;
+use Illuminate\Validation\ValidationException;
 
 class ProdutController extends Controller
 {
     /**
      * Display a listing of the products.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\View\View|\Illuminate\Support\Collection $paginatedData
      */
-    public function index()
+    public function index(Request $request)
     {
-        $products = Product::join('categories','products.category_id','=','categories.id')
-                ->select('products.*','categories.name')->get();
-        return view('admin.products.products', compact('products'));
+        $editorpage = $request->query("editorpage") ? $request->query("editorpage") : null;
+        $peerpage = $request->query("peerpage") ? $request->query("peerpage") : null;
+        $normalpage = $request->query("normalpage") ? $request->query("normalpage") : null;
+        $editorProducts = Product::with(["categories","histories"])
+                        ->where("is_editor_choice",true)
+                        ->paginate(6, ["*"], "page", $editorpage);
+        $peerProducts = Product::with(["categories","histories"])
+                        ->whereHas("histories")
+                        ->withCount("histories")
+                        ->orderBy("histories_count", "desc")
+                        ->paginate(6, ["*"], "page", $peerpage);
+                      
+        $normalProducts = Product::with(["categories","histories"])
+                        ->withCount("histories")
+                        ->orderBy("histories_count", "desc")
+                        ->paginate(6, ["*"], "page", $normalpage);
+        $products = new Collection(["peerProducts"=>$peerProducts,"editorProducts"=>$editorProducts,"normalProducts"=>$normalProducts]);
+        $paginatedData = $products->map(function ($items, $key) {
+            return [
+                'total' => $items->total(),
+                'current_page' => $items->currentPage(),
+                'per_page' => $items->perPage(),
+                'last_page' => $items->lastPage(),
+                "items" => $items->items()
+            ];
+        });
+        if($editorpage || $normalpage || $peerpage){
+            return $paginatedData;
+        }
+        return view('admin.products.products', compact('paginatedData'));
     }
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-        // return view('admin.products.addProducts');
-    }
+    
 
     /**
      * Store a newly created resource in storage.
@@ -57,7 +77,9 @@ class ProdutController extends Controller
          $product->category_id = $request->catagory;
          $product->title =  $request->product_title;
          $product->description = $request->product_description;
+         $product->description = $request->product_description;
          $product->image = $request->product_image;
+         $product->is_editor_choice = $request->is_editor_choice == 'true' ? 1 : 0;
          $newDate = date("Y-m-d", strtotime($request->scheduled_date));
          $product->scheduled_at =  $newDate;
          $product->save();
@@ -129,7 +151,25 @@ class ProdutController extends Controller
             return ['code' => '200','error_message'=>$e->getMessage()];
         }
     }
-
+    
+    /**
+     * Redirect the Url.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function redirectUrl(Request $request){
+       $id =  $request->route()->parameter("id");
+       $redirect_url =  $request->query("redirect_url");
+      
+       $prouducthistory = ProductClickHistory::create([
+        "user_id" => Auth::user()->id,
+        "product_id" => $id,
+       ]);
+       $productClientHistory = ProductClickHistory::where("product_id","=" ,$id )->get();
+     
+       return response($productClientHistory,200);
+    }
     public function addProduct(){
 
         $Categories = Category::all();
@@ -153,7 +193,7 @@ class ProdutController extends Controller
                     $image =  $preview['images'][0];
                 }
                 else{
-                    $image = 'https://via.placeholder.com/150';
+                    $image = config('app.logo_image_url');
                 }
             }
             $data = [

@@ -1,7 +1,7 @@
 <?php
 
-use App\Http\Controllers\AdminDashboardController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AdminDashboardController;
 
 /*
 |--------------------------------------------------------------------------
@@ -54,7 +54,8 @@ Route::group(['middleware' => ['permission:dashboard']], function () {
     Route::resource('users', UserController::class);
 
     // ProdutController
-    Route::resource('vewProducts', ProdutController::class);
+    Route::resource('products', ProdutController::class);
+    Route::get('products/{id}/view','ProdutController@redirectUrl');
 
     // ProdutController
      Route::get('addProduct', 'ProdutController@addProduct');

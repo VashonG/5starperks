@@ -58,10 +58,16 @@
                   <div class="col-lg-4 col-md-6">
                      <div class="mb-1">
                         <label class="form-label"  for="Url">Url</label>
-                        <input type="url" id="product_link" class="form-control " name="Url" placeholder="https://www.xyz.com" required/>
-                            <small class="text-muted">Press Enter To view product.</small>
-
+                        <div class="input-group form-password-toggle input-group-merge">
+                            <input type="url" id="product_link" class="form-control" name="Url" placeholder="https://www.xyz.com" required />
+                            <div class="input-group-text cursor-pointer" style="padding: 0px 8px ;">
+                                <button class="btn btn-primary p-0" id="product_link_viewer" style="padding:6px 15px !important;" >
+                                <i data-feather="link" class="font-medium-4 me-25"></i>
+                                </button>
+                            </div>
                         </div>
+                        
+                        </div> 
                   </div>
                   <div class="col-lg-4 col-md-6">
                      <div class="mb-1">
@@ -80,10 +86,16 @@
                             <input id="scheduled" type="text"  class="form-control scheduled-picker" name="scheduled_date" placeholder="DD-MM-YYYY" />
                         </div>
                     </div>
-                  <div class="col-lg-12 col-md-12 mt-1">
+                  <div class="col-lg-4 col-md-4 mt-1">
                         <div class="form-check form-check-primary">
                                 <input type="checkbox" class="form-check-input " id="announcements" >
                                 <label class="form-check-label" for="announcements">Add Announcements</label>
+                        </div>
+                  </div> 
+                  <div class="col-lg-4 col-md-4  mt-1">
+                        <div class="form-check form-check-primary">
+                                <input type="checkbox" class="form-check-input " id="is_editor_choice" >
+                                <label class="form-check-label" for="is_editor_choice">Editor Choice</label>
                         </div>
                   </div>
 
@@ -145,14 +157,12 @@ $(document).ready(()=>{
         minDate: "today",
 
     });
-
-    $("#product_link").on('keypress',async function(e) {
-    if(e.which == 13) {
-        $('#show_product').hide();
-        $('#show_loader').show();
-        await scrapURL();
-        }
-    });
+$("#product_link_viewer").on('click',async function(e) {
+    $('#show_product').hide();
+    $('#show_loader').show();
+    await scrapURL();   
+});
+  
     $('#btn-submit').click(async ()=>{
 
         $('#show_loader').show();
@@ -160,14 +170,14 @@ $(document).ready(()=>{
         await scrapURL();
          var formData = new FormData();
         catagory = $('#catagory').val();
-        console.log(catagory)
+       
         formData.append('catagory',catagory);
         console.log($('#product_link').val())
         formData.append('link',$('#product_link').val());
         formData.append('scheduled_date',$('#scheduled').val());
         console.log($('#scheduled').val())
         formData.append('announcements',$('#announcements').is(':checked'));
-
+        formData.append('is_editor_choice',$('#is_editor_choice').is(':checked'));
         $product_image = $('#product_image').attr('src');
         if($product_image){
             formData.append('product_image', $product_image);
@@ -188,7 +198,7 @@ $(document).ready(()=>{
 
         var settings = {
                 "async": true,
-                url: "{{ url('/vewProducts') }}",
+                url: "{{ url('/products') }}",
                 "method": "post",
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -216,7 +226,7 @@ $(document).ready(()=>{
                 }
                 else{
                    console.log("success");
-                    window.location.replace('/vewProducts');
+                    window.location.replace('/products');
                     //sub str the length of description
 
                 }
@@ -251,7 +261,7 @@ async function scrapURL() {
                             title: value
                         })
                     });
-                }
+                }   
                 else if(response.error_message){
                     Toast.fire({
                         icon: 'error',

@@ -52,7 +52,8 @@ return [
     |
     */
 
-    'url' => env('APP_URL', 'http://localhost'),
+    'url' => env('APP_URL', 'http://localhost:8000'),
+    'logo_image_url' => env('APP_URL', 'http://localhost:8000')."/images/logo/logo.png",
 
     'asset_url' => env('ASSET_URL', null),
 
