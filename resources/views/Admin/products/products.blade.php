@@ -47,16 +47,13 @@
         
       <!-- Basic and Outline Pills start -->
       <section id="basic-and-outline-pills">
-                <div class="col-xl-12 col-lg-12">
-                        <a style="margin: 0px 18px 15px;" href="/addProduct"  style="float: right;" class="btn btn-primary">Add Product</a>
-                    </div>
+            <div class="row match-height" style="justify-content:flex-end">
+                <a style="margin: 0px 18px 15px;width:23%;" href="/addProduct"  class="btn btn-primary">Add Product</a>   
+            </div>
                     <div class="row match-height">
                         <!-- Basic pills starts -->
                         <div class="col-xl-12 col-lg-12">
-                            <div class="card">
-                                <div class="card-header">
-                                   
-                                </div>
+                            
                                 <div class="card-body">
                                     <ul class="nav nav-pills">
                                         <li class="nav-item">
@@ -209,8 +206,8 @@
                                        
                                     </div>
                                 </div>
-                            </div>
-                        </div>
+                                </div>
+                       
                         <!-- Basic pills ends -->
                      </div>
                 </section>
