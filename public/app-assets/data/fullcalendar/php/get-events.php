@@ -46,5 +46,5 @@ foreach ($input_arrays as $array) {
 	}
 }
 
-// Send JSON to the client.
+// Send JSON to the Client.
 echo json_encode($output_arrays);

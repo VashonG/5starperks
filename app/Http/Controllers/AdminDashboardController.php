@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use Spatie\Permission\Models\Role;
-use Spatie\Permission\Models\Permission;
+use DataTables;
 use App\Models\User;
 use Illuminate\Http\Request;
-use DataTables;
+use Spatie\Permission\Models\Role;
+use Spatie\Permission\Models\Permission;
 use Illuminate\Validation\ValidationException;
 
 class AdminDashboardController extends Controller
@@ -17,7 +17,7 @@ class AdminDashboardController extends Controller
 
     public function index()
     {
-        return view('admin.dashboard');
+        return view('Admin.dashboard');
     }
     public function salesmen(Request $request){
         if($request->ajax()){    
@@ -28,19 +28,19 @@ class AdminDashboardController extends Controller
             return Datatables::of($users)->make(true);
         }
         $Users =  User::role('salesman')->get();
-        return view('admin.salesman',compact('Users')); 
+        return view('Admin.salesman',compact('Users')); 
     }
      public function announcements(){
-         return view('admin.announcements');
+         return view('Admin.announcements');
     }
      public function category(){
-         return view('admin.category');
+         return view('Admin.category');
     }
      public function Tickets(){
-         return view('admin.Tickets');
+         return view('Admin.Tickets');
     }
      public function customers(){
-         return view('admin.customers');
+         return view('Admin.customers');
     }
      public function get_users(){
         // View all the items

@@ -27,7 +27,7 @@
                         <i data-feather="{{ $cat->icon }}"></i><span class="menu-title text-truncate" data-i18n="Category">{{ $cat->name }}</span>
                     </a>
                     @if(count($cat->childs))
-                        @include('client.layouts.categorymenu',['childs' => $cat->childs])
+                        @include('Client.layouts.categorymenu',['childs' => $cat->childs])
                     @endif
             </li>
         @endforeach

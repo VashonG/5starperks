@@ -44,7 +44,7 @@ class SellerController extends Controller
         $Users =  User::role('salesman')
         ->orderBy('updated_at', 'desc')
         ->get();
-        return view('admin.salesman.salesman',compact('Users'));
+        return view('Admin.Salesman.salesman',compact('Users'));
     }
 
     /**
@@ -54,7 +54,7 @@ class SellerController extends Controller
      */
     public function create()
     {
-        return view('admin.salesman.create');
+        return view('Admin.Salesman.create');
         //
     }
 
@@ -134,7 +134,7 @@ class SellerController extends Controller
                 $data->username = strtolower(str_replace(' ', '_',  $data["name"]));
             }
         }
-        return view('admin.salesman.viewsalesman',compact('data'));
+        return view('Admin.Salesman.viewsalesman',compact('data'));
 
     }
 
@@ -155,7 +155,7 @@ class SellerController extends Controller
                 $data->username = strtolower(str_replace(' ', '_',  $data["name"]));
             }
         }
-        return view('admin.salesman.editsalesman',compact('data'));
+        return view('Admin.Salesman.editsalesman',compact('data'));
     }
 
     /**

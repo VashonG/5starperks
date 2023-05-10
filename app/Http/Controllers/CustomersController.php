@@ -42,7 +42,7 @@ class CustomersController extends Controller
         $Users =  User::role('customer') 
          ->orderBy('updated_at', 'desc')
         ->get();
-        return view('admin.customers.customers',compact('Users')); 
+        return view('Admin.customers.customers',compact('Users')); 
     }
 
     /**
@@ -123,7 +123,7 @@ class CustomersController extends Controller
                 $data->username = strtolower(str_replace(' ', '_',  $data["name"]));
             }
         }
-        return view('admin.customers.viewCustomers',compact('data'));
+        return view('Admin.customers.viewCustomers',compact('data'));
     }
 
     /**
@@ -144,7 +144,7 @@ class CustomersController extends Controller
                 $data->username = strtolower(str_replace(' ', '_',  $data["name"]));
             }
         }
-        return view('admin.customers.editCustomers',compact('data'));
+        return view('Admin.customers.editCustomers',compact('data'));
     }
 
     /**

@@ -1,4 +1,4 @@
-@extends('admin.layouts.master')
+@extends('Admin.layouts.master')
 @section('title', 'Roles & Permissions')
 @section('style')
 <link rel="stylesheet" type="text/css" href="{{asset('app-assets/css/pages/app-user.css')}}">

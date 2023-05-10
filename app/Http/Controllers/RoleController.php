@@ -26,7 +26,7 @@ class RoleController extends Controller
             return Datatables::eloquent(Role::query())->make(true);
         }
         $permissions = Permission::all();
-        return view('admin.roles.index', compact('permissions'));
+        return view('Admin.roles.index', compact('permissions'));
     }
 
     /**

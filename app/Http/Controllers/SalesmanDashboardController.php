@@ -12,13 +12,13 @@ class SalesmanDashboardController extends Controller
 
     public function index()
     {
-        return view('salesman.dashboard');
+        return view('Salesman.dashboard');
     }
     public function customers(){
-        return view('salesman.customers');
+        return view('Salesman.customers');
     }
     public function sales(){
-        return view('salesman.sales');
+        return view('Salesman.sales');
     }
        /**
      * Display a listing of the resource.
@@ -33,14 +33,14 @@ class SalesmanDashboardController extends Controller
         return $json;
     }
     public function products(){
-        return view('salesman.products');    
+        return view('Salesman.products');    
     }
     
     public function announcements(){
-        return view('salesman.announcements');
+        return view('Salesman.announcements');
     }
     public function profile(){
-        return view('salesman.profile');
+        return view('Salesman.profile');
     }
     
 

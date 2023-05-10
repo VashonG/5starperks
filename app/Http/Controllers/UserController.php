@@ -28,7 +28,7 @@ class UserController extends Controller
         }
         $roles = Role::all();
 
-        return view('admin.roles.users', get_defined_vars());
+        return view('Admin.roles.users', get_defined_vars());
     }
 
     /**

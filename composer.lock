@@ -2417,7 +2417,7 @@
             "version": "1.0.1",
             "source": {
                 "type": "git",
-                "url": "https://github.com/php-fig/http-client.git",
+                "url": "https://github.com/php-fig/http-Client.git",
                 "reference": "2dfb5f6c5eff0e91e20e913f8c5452ed95b86621"
             },
             "dist": {
@@ -3803,7 +3803,7 @@
             "version": "v6.0.5",
             "source": {
                 "type": "git",
-                "url": "https://github.com/symfony/http-client.git",
+                "url": "https://github.com/symfony/http-Client.git",
                 "reference": "a8f87328930932c455cffd048f965d1223d91915"
             },
             "dist": {

@@ -12,15 +12,15 @@ class CustomerDashboardController extends Controller
     }
     public function index()
     {
-        return view('client.dashboard');
+        return view('Client.dashboard');
 }
  
      public function products(){
-         return view('client.products');
+         return view('Client.products');
     }
      
       public function profile(){
-         return view('client.profile');
+         return view('Client.profile');
     }
      
 }

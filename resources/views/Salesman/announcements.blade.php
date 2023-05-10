@@ -1,4 +1,4 @@
-@extends('salesman.layouts.master')
+@extends('Salesman.layouts.master')
 @section('title', 'Announcements')
 @section('style')
 <link rel="stylesheet" type="text/css" href="{{asset('app-assets/css/pages/app-user.css')}}">

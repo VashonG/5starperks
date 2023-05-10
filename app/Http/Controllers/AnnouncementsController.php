@@ -44,12 +44,12 @@ class AnnouncementsController extends Controller
             }
         }
         if (Auth::user()->hasRole('Salesman')) {
-        return view('salesman.announcements',compact('announcments'));
+        return view('Salesman.announcements',compact('announcments'));
         }
         elseif(Auth::user()->hasRole('Customer')){
-            return view('client.announcements',compact('announcments'));
+            return view('Client.announcements',compact('announcments'));
         }else{
-            return view('admin.announcements',compact('announcments'));
+            return view('Admin.announcements',compact('announcments'));
         }
 
 
@@ -162,7 +162,7 @@ class AnnouncementsController extends Controller
         else{
             return false;
         }
-        return view('admin.salesman.imagesupload');
+        return view('Admin.Salesman.imagesupload');
     }
     public function PostComment(Request $request)
     {

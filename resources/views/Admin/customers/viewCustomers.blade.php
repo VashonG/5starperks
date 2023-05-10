@@ -1,4 +1,4 @@
-@extends('admin.layouts.master')
+@extends('Admin.layouts.master')
 @section('title', 'Customers')
 @section('style')
 <link rel="stylesheet" type="text/css" href="../../../app-assets/css/plugins/forms/form-validation.css">

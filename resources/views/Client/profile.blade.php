@@ -1,4 +1,4 @@
-@extends('client.layouts.master')
+@extends('Client.layouts.master')
 
 @section('title', 'Profile')
 @section('content')

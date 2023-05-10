@@ -23,7 +23,7 @@ class PermissionController extends Controller
         if($request->ajax()){
             return Datatables::eloquent(Permission::query())->make(true);
         }
-        return view('admin.roles.permission');
+        return view('Admin.roles.permission');
     }
 
     /**

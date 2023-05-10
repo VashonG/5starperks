@@ -33,7 +33,7 @@ class AggreamentController extends Controller
         $aggreaments =  DB::table('aggreaments')
                         ->select('*')
                         ->get();
-        return view('admin.aggreaments.index',compact('aggreaments'));
+        return view('Admin.aggreaments.index',compact('aggreaments'));
     }
         // Aggreament::all().;
 
@@ -47,7 +47,7 @@ class AggreamentController extends Controller
      */
     public function create()
     {
-        return view('admin.aggreaments.create');
+        return view('Admin.aggreaments.create');
 
         //
     }
@@ -132,7 +132,7 @@ class AggreamentController extends Controller
     }
     public function currentAggreament(){
         $aggreament = Aggreament::where('is_applied',"1")->first();
-        return view('admin.aggreaments.view',compact('aggreament'));
+        return view('Admin.aggreaments.view',compact('aggreament'));
     }
 
 }

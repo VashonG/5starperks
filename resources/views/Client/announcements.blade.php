@@ -1,4 +1,4 @@
-@extends('client.layouts.master')
+@extends('Client.layouts.master')
 @section('title', 'Announcements')
 @section('style')
 <link rel="stylesheet" type="text/css" href="{{asset('app-assets/css/pages/app-user.css')}}">

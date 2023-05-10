@@ -88,9 +88,9 @@
 
 <body class="vertical-layout vertical-menu-modern  navbar-floating footer-static  " data-open="click" data-menu="vertical-menu-modern" data-col="">
 
-    @include('admin.layouts.header')
+    @include('Admin.layouts.header')
     <div class="main-menu menu-fixed menu-light menu-accordion menu-shadow" data-scroll-to-active="true">
-        @include('admin.layouts.sidebar')
+        @include('Admin.layouts.sidebar')
     </div>
     <div class="app-content content">
         <div class="content-overlay"></div>
@@ -101,7 +101,7 @@
     </div>
     <div class="sidenav-overlay"></div>
     <div class="drag-target"></div>
-    @include('admin.layouts.footer')
+    @include('Admin.layouts.footer')
   
   
     <!-- BEGIN: Vendor JS-->

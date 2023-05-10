@@ -50,7 +50,7 @@ class CategoryController extends Controller
                 $categories[$key]->parent_name = $parent->name;
         }
     }
-        return view('admin.categories.categories',compact('categories'));
+        return view('Admin.categories.categories',compact('categories'));
     }
 
     /**

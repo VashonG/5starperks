@@ -54,7 +54,7 @@ class ProdutController extends Controller
         if($editorpage || $normalpage || $peerpage){
             return $paginatedData;
         }
-        return view('admin.products.products', compact('paginatedData'));
+        return view('Admin.products.products', compact('paginatedData'));
     }
     
 
@@ -173,7 +173,7 @@ class ProdutController extends Controller
     public function addProduct(){
 
         $Categories = Category::all();
-        return view('admin.products.addProducts',compact('Categories'));
+        return view('Admin.products.addProducts',compact('Categories'));
     }
 
     public function scrapUrlData(Request $request){
@@ -219,10 +219,10 @@ class ProdutController extends Controller
             ->get();
 
             if (Auth::user()->hasRole('Salesman')) {
-            return view('salesman.products',compact('products'));
+            return view('Salesman.products',compact('products'));
             }
             elseif(Auth::user()->hasRole('Customer')){
-                return view('client.products',compact('products'));
+                return view('Client.products',compact('products'));
             }
         } catch (\Throwable $th) {
             return ['code' => '200','error_message'=>$th->getMessage()];
