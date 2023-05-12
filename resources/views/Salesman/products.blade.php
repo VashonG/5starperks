@@ -25,13 +25,13 @@
                 <div class="card-body">
                     <ul class="nav nav-pills">
                         <li class="nav-item">
-                            <a class="nav-link" id="editor-data-tab" data-bs-toggle="pill" aria-expanded="true">Editor Choice</a>
+                            <a class="nav-link nav-tab" id="editor-data-tab" data-bs-toggle="pill" aria-expanded="true">Editor Choice</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link active" id="peer-data-tab" data-bs-toggle="pill"  aria-expanded="false">Peer Choice</a>
+                            <a class="nav-link nav-tab active" id="peer-data-tab" data-bs-toggle="pill"  aria-expanded="false">Peer Choice</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" id="normal-data-tab" data-bs-toggle="pill"  aria-expanded="false">Normal Products</a>
+                            <a class="nav-link nav-tab" id="normal-data-tab" data-bs-toggle="pill"  aria-expanded="false">Normal Products</a>
                         </li>                                
                     </ul>
                 <div class="tab-content">
@@ -63,7 +63,7 @@
                                     @endif
                                 <h4 class="card-title">{{ $product->title }}</h4>
                                 <p class="card-text" style="min-height:84px;">
-                                {{ strlen($product->description) > 120 ? substr($product->description, 0, 120)."..." : $product->description; }}   
+                                {{ strlen($product->description) > 120 ? substr($product->description, 0, 120)."..." : $product->description }}   
                             </p>
                                 <div style="display: flex; flex-direction :row;justify-content:space-between">
                                     <a onclick="viewProduct({{ $product->id }},'{{ $product->link }}')" id="view-histories" class="btn btn-outline-primary">Visit Website</a>
@@ -350,7 +350,7 @@ function viewProduct(id,url){
            
 }
 
-$(".nav-link").click(function(event){
+$(".nav-tab").click(function(event){
     event.preventDefault();
     var id = $(this).attr("id");
 

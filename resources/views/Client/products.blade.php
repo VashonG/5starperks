@@ -25,13 +25,13 @@
                 <div class="card-body">
                     <ul class="nav nav-pills">
                         <li class="nav-item">
-                            <a class="nav-link" id="editor-data-tab" data-bs-toggle="pill" aria-expanded="true">Editor Choice</a>
+                            <a class="nav-link nav-tab" id="editor-data-tab" data-bs-toggle="pill" aria-expanded="true">Editor Choice</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link active" id="peer-data-tab" data-bs-toggle="pill"  aria-expanded="false">Peer Choice</a>
+                            <a class="nav-link nav-tab active" id="peer-data-tab" data-bs-toggle="pill"  aria-expanded="false">Peer Choice</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" id="normal-data-tab" data-bs-toggle="pill"  aria-expanded="false">Normal Products</a>
+                            <a class="nav-link nav-tab" id="normal-data-tab" data-bs-toggle="pill"  aria-expanded="false">Normal Products</a>
                         </li>                                
                     </ul>
                 <div class="tab-content">
@@ -106,7 +106,7 @@
                 @if (!empty($product->scheduled_at) && $product->scheduled_at > now())
                     <div style="float:right;" class="bg-info-gradient d-flex">
                             <i style="margin-right: 10px; height: 1.4rem; color: #1aeaff; width: 2rem;" data-feather='clock'></i>
-                            <p class="card-text text-dark">{{  date("d-m-Y", strtotime($product->scheduled_at)); }}</p>
+                            <p class="card-text text-dark">{{  date("d-m-Y", strtotime($product->scheduled_at)) }}</p>
                     </div>
                         @else
                         <p class="card-text text-white"></p>
@@ -350,7 +350,7 @@ function viewProduct(id,url){
            
 }
 
-$(".nav-link").click(function(event){
+$(".nav-tab").click(function(event){
     event.preventDefault();
     var id = $(this).attr("id");
 
