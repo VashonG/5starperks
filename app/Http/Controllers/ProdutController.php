@@ -212,17 +212,54 @@ class ProdutController extends Controller
     }
     public function getProducts(Request $request){
         try {
-            $url = $request->slug;
-            $products = Product::join('categories','products.category_id','=','categories.id')
-            ->select('products.*')
-            ->where('categories.slug', '=',  $url)
-            ->get();
+            
+             $url = $request->slug;
+           
+            $editorpage = $request->query("editorpage") ? $request->query("editorpage") : null;
+            $peerpage = $request->query("peerpage") ? $request->query("peerpage") : null;
+            $normalpage = $request->query("normalpage") ? $request->query("normalpage") : null;
+            $editorProducts = Product::with(["categories","histories"])
+                            ->where("is_editor_choice",true)
+                            ->whereHas('categories', function ($query) use ($url) {
+                                $query->where('slug', $url);
+                            })
+                            ->paginate(6, ["*"], "page", $editorpage);
+            $peerProducts = Product::with(["categories","histories"])
+                            ->whereHas("histories")
+                            ->withCount("histories")
+                            ->whereHas('categories', function ($query) use ($url) {
+                                $query->where('slug', $url);
+                            })
+                            ->orderBy("histories_count", "desc")
+                            ->paginate(6, ["*"], "page", $peerpage);
+                          
+            $normalProducts = Product::with(["categories","histories"])
+                            ->withCount("histories")
+                            ->whereHas('categories', function ($query) use ($url) {
+                                $query->where('slug', $url);
+                            })
+                            ->orderBy("histories_count", "desc")
+                            ->paginate(6, ["*"], "page", $normalpage);
+            $products = new Collection(["peerProducts"=>$peerProducts,"editorProducts"=>$editorProducts,"normalProducts"=>$normalProducts]);
+            $paginatedData = $products->map(function ($items, $key) {
+                return [
+                    'total' => $items->total(),
+                    'current_page' => $items->currentPage(),
+                    'per_page' => $items->perPage(),
+                    'last_page' => $items->lastPage(),
+                    "items" => $items->items()
+                ];
+            });
+            if($editorpage || $normalpage || $peerpage){
+                return $paginatedData;
+            }
+            
 
             if (Auth::user()->hasRole('Salesman')) {
-            return view('Salesman.products',compact('products'));
+            return view('Salesman.products',compact('paginatedData'));
             }
             elseif(Auth::user()->hasRole('Customer')){
-                return view('Client.products',compact('products'));
+                return view('Client.products',compact('paginatedData'));
             }
         } catch (\Throwable $th) {
             return ['code' => '200','error_message'=>$th->getMessage()];

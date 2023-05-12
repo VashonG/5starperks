@@ -14,8 +14,12 @@
    margin: 6.75rem auto !important;
    }
    }
-   .bs-stepper{
+   #bs-stepper{
    box-shadow:none !important;
+   }
+    #product_link-error {
+    position: absolute;
+    bottom: -22px;
    }
 </style>
 @endsection
@@ -58,15 +62,18 @@
                   <div class="col-lg-4 col-md-6">
                      <div class="mb-1">
                         <label class="form-label"  for="Url">Url</label>
-                        <div class="input-group form-password-toggle input-group-merge">
+                        {{-- <div class="input-group form-password-toggle input-group-merge">
                             <input type="url" id="product_link" class="form-control" name="Url" placeholder="https://www.xyz.com" required />
                             <div class="input-group-text cursor-pointer" style="padding: 0px 8px ;">
                                 <button class="btn btn-primary p-0" id="product_link_viewer" style="padding:6px 15px !important;" >
                                 <i data-feather="link" class="font-medium-4 me-25"></i>
                                 </button>
                             </div>
+                        </div> --}}
+                        <div class="input-group">
+                            <input type="url" class="form-control"  id="product_link" placeholder="https://www.xyz.com" name="Url" aria-describedby="button-addon2" required/>
+                            <button class="btn btn-outline-primary"  id="product_link_viewer" type="button"><i data-feather="link" class="font-medium-4 me-25"></i></button>
                         </div>
-                        
                         </div> 
                   </div>
                   <div class="col-lg-4 col-md-6">

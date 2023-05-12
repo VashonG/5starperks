@@ -17,6 +17,17 @@
    .bs-stepper{
    box-shadow:none !important;
    }
+   .no-data_card{
+        min-height: 250px;
+        background-color: #fff;
+        display: grid;
+        justify-content: center;
+        align-items: center;
+    }
+    .nodata svg.feather.feather-hard-drive{
+        height: 4rem;
+         width: 4rem;
+    }
 </style>
 @endsection
 @section('content')
@@ -71,38 +82,48 @@
                                     <div class="tab-content">
                                         <div role="tabpanel" class="tab-pane" id="editor" aria-labelledby="editor-data-tab" aria-expanded="true">
                                         <div id="editor-tab" class="row match-height">
-            
-            @foreach($paginatedData["editorProducts"]["items"] as $product)
-            <div class="col-md-6 col-lg-4">
-                <div class="card">
-                    <img class="card-img-top"  src="{{ $product->image }}" alt="Card image cap" />
-                    <div class="card-body">
-                        <div class="card-img-overlay">
-                            <button class="btn btn-outline-danger text-nowrap px-1 waves-effect" style="float: right;" product_id="{{ $product->id}}"  onclick="deleteProduct(<?=  $product->id; ?>)" type="button">
-                                <i data-feather='trash-2'></i>
-                            </button>
-                        </div>
-                    @if (!empty($product->scheduled_at) && $product->scheduled_at > now())
-                        <div style="float:right;" class="bg-info-gradient d-flex">
-                             <i style="margin-right: 10px; height: 1.4rem; color: #1aeaff; width: 2rem;" data-feather='clock'></i>
-                             <p class="card-text text-dark">{{  date("d-m-Y", strtotime($product->scheduled_at)) }}</p>
-                        </div>
-                            @else
-                            <p class="card-text text-white"></p>
-                            @endif
-                        <h4 class="card-title">{{ $product->title }}</h4>
-                        <p class="card-text" style="min-height:84px;">
-                        {{ strlen($product->description) > 120 ? substr($product->description, 0, 120)."..." : $product->description; }}   
-                    </p>
-                        <div style="display: flex; flex-direction :row;justify-content:space-between">
-                            <a onclick="viewProduct({{ $product->id }},'{{ $product->link }}')" id="view-histories" class="btn btn-outline-primary">Visit Website</a>
-                            <a style="font-size:1.3rem" class="btn btn-default"><i style="height: 1.3rem; width: 1.8rem;" data-feather='activity'></i><span class="histories-count-{{ $product->id }}">  {{ $product->histories && count($product->histories) > 0  ? count($product->histories    ) : 0  }} </span></a>
+                @if(count($paginatedData["editorProducts"]["items"])==0)
+                <div class="col-md-12 col-lg-12">
+                    <div class="card no-data_card">
+                        <div class="nodata">
+                            <i data-feather='hard-drive'></i>
+                            <p>No Data</p>  
                         </div>
                     </div>
                 </div>
-            </div>
-            @endforeach
+                @else
+                @foreach($paginatedData["editorProducts"]["items"] as $product)
+                    <div class="col-md-6 col-lg-4">
+                        <div class="card">
+                            <img class="card-img-top"  src="{{ $product->image }}" alt="Card image cap" />
+                            <div class="card-body">
+                                <div class="card-img-overlay">
+                                    <button class="btn btn-outline-danger text-nowrap px-1 waves-effect" style="float: right;" product_id="{{ $product->id}}"  onclick="deleteProduct(<?=  $product->id; ?>)" type="button">
+                                        <i data-feather='trash-2'></i>
+                                    </button>
+                                </div>
+                            @if (!empty($product->scheduled_at) && $product->scheduled_at > now())
+                                <div style="float:right;" class="bg-info-gradient d-flex">
+                                    <i style="margin-right: 10px; height: 1.4rem; color: #1aeaff; width: 2rem;" data-feather='clock'></i>
+                                    <p class="card-text text-dark">{{  date("d-m-Y", strtotime($product->scheduled_at)) }}</p>
+                                </div>
+                                    @else
+                                    <p class="card-text text-white"></p>
+                                    @endif
+                                <h4 class="card-title">{{ $product->title }}</h4>
+                                <p class="card-text" style="min-height:84px;">
+                                {{ strlen($product->description) > 120 ? substr($product->description, 0, 120)."..." : $product->description }}   
+                            </p>
+                                <div style="display: flex; flex-direction :row;justify-content:space-between">
+                                    <a onclick="viewProduct({{ $product->id }},'{{ $product->link }}')" id="view-histories" class="btn btn-outline-primary">Visit Website</a>
+                                    <a style="font-size:1.3rem" class="btn btn-default"><i style="height: 1.3rem; width: 1.8rem;" data-feather='activity'></i><span class="histories-count-{{ $product->id }}">  {{ $product->histories && count($product->histories) > 0  ? count($product->histories    ) : 0  }} </span></a>
+                                </div>
+                            </div>
+                        </div>
                     </div>
+                @endforeach
+                @endif
+            </div>
             <!-- reload button -->
             @if($paginatedData["editorProducts"]["last_page"] >$paginatedData["editorProducts"]["current_page"] )
             <div class="row">
@@ -115,38 +136,49 @@
 
                                         </div>
                                         <div class="tab-pane active" id="peer"  role="tabpanel"  aria-labelledby="peer-data-tab" aria-expanded="false">
-                                        <div id="peer-tab" class="row match-height">
-            @foreach($paginatedData["peerProducts"]["items"] as $product)
-            <div class="col-md-6 col-lg-4">
-                <div class="card">
-                    <img class="card-img-top"  src="{{ $product->image }}" alt="Card image cap" />
-                    <div class="card-body">
-                        <div class="card-img-overlay">
-                            <button class="btn btn-outline-danger text-nowrap px-1 waves-effect" style="float: right;" product_id="{{ $product->id}}"  onclick="deleteProduct(<?=  $product->id; ?>)" type="button">
-                                <i data-feather='trash-2'></i>
-                            </button>
-                        </div>
-                    @if (!empty($product->scheduled_at) && $product->scheduled_at > now())
-                        <div style="float:right;" class="bg-info-gradient d-flex">
-                             <i style="margin-right: 10px; height: 1.4rem; color: #1aeaff; width: 2rem;" data-feather='clock'></i>
-                             <p class="card-text text-dark">{{  date("d-m-Y", strtotime($product->scheduled_at)); }}</p>
-                        </div>
-                            @else
-                            <p class="card-text text-white"></p>
-                            @endif
-                        <h4 class="card-title">{{ $product->title }}</h4>
-                        <p class="card-text" style="min-height:84px;">
-                        {{ strlen($product->description) > 120 ? substr($product->description, 0, 120)."..." : $product->description; }}   
-                    </p>
-                        <div style="display: flex; flex-direction :row;justify-content:space-between">
-                            <a onclick="viewProduct({{ $product->id }},'{{ $product->link }}')" id="view-histories" class="btn btn-outline-primary">Visit Website</a>
-                            <a style="font-size:1.3rem" class="btn btn-default"><i style="height: 1.3rem; width: 1.8rem;" data-feather='activity'></i><span class="histories-count-{{ $product->id }}">  {{ $product->histories && count($product->histories) > 0  ? count($product->histories    ) : 0  }} </span></a>
+            <div id="peer-tab" class="row match-height">
+                @if(count($paginatedData["peerProducts"]["items"])==0)
+                    <div class="col-md-12 col-lg-12">
+                        <div class="card no-data_card">
+                            <div class="nodata">
+                                <i data-feather='hard-drive'></i>
+                                <p>No Data</p>  
+                            </div>
                         </div>
                     </div>
-                </div>
+                @else
+                    @foreach($paginatedData["peerProducts"]["items"] as $product)
+                    <div class="col-md-6 col-lg-4">
+                        <div class="card">
+                            <img class="card-img-top"  src="{{ $product->image }}" alt="Card image cap" />
+                            <div class="card-body">
+                                <div class="card-img-overlay">
+                                    <button class="btn btn-outline-danger text-nowrap px-1 waves-effect" style="float: right;" product_id="{{ $product->id}}"  onclick="deleteProduct(<?=  $product->id; ?>)" type="button">
+                                        <i data-feather='trash-2'></i>
+                                    </button>
+                                </div>
+                            @if (!empty($product->scheduled_at) && $product->scheduled_at > now())
+                                <div style="float:right;" class="bg-info-gradient d-flex">
+                                    <i style="margin-right: 10px; height: 1.4rem; color: #1aeaff; width: 2rem;" data-feather='clock'></i>
+                                    <p class="card-text text-dark">{{  date("d-m-Y", strtotime($product->scheduled_at)) }}</p>
+                                </div>
+                                    @else
+                                    <p class="card-text text-white"></p>
+                                    @endif
+                                <h4 class="card-title">{{ $product->title }}</h4>
+                                <p class="card-text" style="min-height:84px;">
+                                {{ strlen($product->description) > 120 ? substr($product->description, 0, 120)."..." : $product->description }}   
+                            </p>
+                                <div style="display: flex; flex-direction :row;justify-content:space-between">
+                                    <a onclick="viewProduct({{ $product->id }},'{{ $product->link }}')" id="view-histories" class="btn btn-outline-primary">Visit Website</a>
+                                    <a style="font-size:1.3rem" class="btn btn-default"><i style="height: 1.3rem; width: 1.8rem;" data-feather='activity'></i><span class="histories-count-{{ $product->id }}">  {{ $product->histories && count($product->histories) > 0  ? count($product->histories    ) : 0  }} </span></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    @endforeach
+                @endif
             </div>
-            @endforeach
-        </div>
          <!-- reload button -->
          @if($paginatedData["peerProducts"]["last_page"] >$paginatedData["peerProducts"]["current_page"] )
             <div class="row">
@@ -159,37 +191,48 @@
 
                                         </div>
                                         <div class="tab-pane" id="normal-data-tab"  role="tabpanel"  aria-labelledby="normal-data-tab" aria-expanded="false">
-                                        <div id="normal-tab" class="row match-height">
-        @foreach($paginatedData["normalProducts"]["items"] as $product)
-            <div class="col-md-6 col-lg-4">
-                <div class="card">
-                    <img class="card-img-top"  src="{{ $product->image }}" alt="Card image cap" />
-                    <div class="card-body">
-                        <div class="card-img-overlay">
-                            <button class="btn btn-outline-danger text-nowrap px-1 waves-effect" style="float: right;" product_id="{{ $product->id}}"  onclick="deleteProduct(<?=  $product->id; ?>)" type="button">
-                                <i data-feather='trash-2'></i>
-                            </button>
-                        </div>
-                    @if (!empty($product->scheduled_at) && $product->scheduled_at > now())
-                        <div style="float:right;" class="bg-info-gradient d-flex">
-                             <i style="margin-right: 10px; height: 1.4rem; color: #1aeaff; width: 2rem;" data-feather='clock'></i>
-                             <p class="card-text text-dark">{{  date("d-m-Y", strtotime($product->scheduled_at)); }}</p>
-                        </div>
-                            @else
-                            <p class="card-text text-white"></p>
-                            @endif
-                        <h4 class="card-title">{{ $product->title }}</h4>
-                        <p class="card-text" style="min-height:84px;">
-                        {{ strlen($product->description) > 120 ? substr($product->description, 0, 120)."..." : $product->description; }}   
-                    </p>
-                        <div style="display: flex; flex-direction :row;justify-content:space-between">
-                            <a onclick="viewProduct({{ $product->id }},'{{ $product->link }}')" id="view-histories" class="btn btn-outline-primary">Visit Website</a>
-                            <a style="font-size:1.3rem" class="btn btn-default"><i style="height: 1.3rem; width: 1.8rem;" data-feather='activity'></i><span class="histories-count-{{ $product->id }}">  {{ $product->histories && count($product->histories) > 0  ? count($product->histories    ) : 0  }} </span></a>
-                        </div>
+        <div id="normal-tab" class="row match-height">
+            @if(count($paginatedData["normalProducts"]["items"]) == 0)
+            <div class="col-md-12 col-lg-12">
+                <div class="card no-data_card">
+                    <div class="nodata">
+                        <i data-feather='hard-drive'></i>
+                        <p>No Data</p>  
                     </div>
                 </div>
             </div>
+            @else
+           @foreach($paginatedData["normalProducts"]["items"] as $product)
+                <div class="col-md-6 col-lg-4">
+                    <div class="card">
+                        <img class="card-img-top"  src="{{ $product->image }}" alt="Card image cap" />
+                        <div class="card-body">
+                            <div class="card-img-overlay">
+                                <button class="btn btn-outline-danger text-nowrap px-1 waves-effect" style="float: right;" product_id="{{ $product->id}}"  onclick="deleteProduct(<?=  $product->id; ?>)" type="button">
+                                    <i data-feather='trash-2'></i>
+                                </button>
+                            </div>
+                        @if (!empty($product->scheduled_at) && $product->scheduled_at > now())
+                            <div style="float:right;" class="bg-info-gradient d-flex">
+                                <i style="margin-right: 10px; height: 1.4rem; color: #1aeaff; width: 2rem;" data-feather='clock'></i>
+                                <p class="card-text text-dark">{{  date("d-m-Y", strtotime($product->scheduled_at)); }}</p>
+                            </div>
+                                @else
+                                <p class="card-text text-white"></p>
+                                @endif
+                            <h4 class="card-title">{{ $product->title }}</h4>
+                            <p class="card-text" style="min-height:84px;">
+                            {{ strlen($product->description) > 120 ? substr($product->description, 0, 120)."..." : $product->description; }}   
+                        </p>
+                            <div style="display: flex; flex-direction :row;justify-content:space-between">
+                                <a onclick="viewProduct({{ $product->id }},'{{ $product->link }}')" id="view-histories" class="btn btn-outline-primary">Visit Website</a>
+                                <a style="font-size:1.3rem" class="btn btn-default"><i style="height: 1.3rem; width: 1.8rem;" data-feather='activity'></i><span class="histories-count-{{ $product->id }}">  {{ $product->histories && count($product->histories) > 0  ? count($product->histories    ) : 0  }} </span></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             @endforeach
+            @endif
         </div>
          <!-- reload button -->
          @if($paginatedData["normalProducts"]["last_page"] >$paginatedData["normalProducts"]["current_page"] )
