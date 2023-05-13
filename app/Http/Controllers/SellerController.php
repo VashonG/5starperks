@@ -2,17 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use DB;
+use DataTables;
 use App\Models\User;
 use App\Models\Company;
 use App\Models\Ownership;
-use Illuminate\Validation\ValidationException;
+use Illuminate\Http\Request;
 use Spatie\Permission\Models\Role;
-use DataTables;
 use App\Http\Controllers\Throwable;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
-use DB;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\ValidationException;
 
 
 class SellerController extends Controller
@@ -44,7 +44,7 @@ class SellerController extends Controller
         $Users =  User::role('salesman')
         ->orderBy('updated_at', 'desc')
         ->get();
-        return view('Admin.Salesman.salesman',compact('Users'));
+        return view('Admin.salesman.salesman',compact('Users'));
     }
 
     /**
@@ -54,7 +54,7 @@ class SellerController extends Controller
      */
     public function create()
     {
-        return view('Admin.Salesman.create');
+        return view('Admin.salesman.create');
         //
     }
 
@@ -134,7 +134,7 @@ class SellerController extends Controller
                 $data->username = strtolower(str_replace(' ', '_',  $data["name"]));
             }
         }
-        return view('Admin.Salesman.viewsalesman',compact('data'));
+        return view('Admin.salesman.viewsalesman',compact('data'));
 
     }
 
@@ -155,7 +155,7 @@ class SellerController extends Controller
                 $data->username = strtolower(str_replace(' ', '_',  $data["name"]));
             }
         }
-        return view('Admin.Salesman.editsalesman',compact('data'));
+        return view('Admin.salesman.editsalesman',compact('data'));
     }
 
     /**

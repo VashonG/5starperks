@@ -2,19 +2,19 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Models\User;
-use App\Models\Announcement;
-use App\Models\Comment;
-use Illuminate\Validation\ValidationException;
-use Spatie\Permission\Models\Role;
 use DataTables;
-use App\Http\Controllers\Throwable;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Auth;
+use App\Models\User;
+use App\Models\Comment;
+use App\Models\Announcement;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-
+use Spatie\Permission\Models\Role;
+use App\Http\Controllers\Throwable;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use function PHPUnit\Framework\returnSelf;
+
+use Illuminate\Validation\ValidationException;
 
 class AnnouncementsController extends Controller
 {
@@ -162,7 +162,7 @@ class AnnouncementsController extends Controller
         else{
             return false;
         }
-        return view('Admin.Salesman.imagesupload');
+        return view('Admin.salesman.imagesupload');
     }
     public function PostComment(Request $request)
     {
