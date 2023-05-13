@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use Carbon\Carbon;
 use App\Models\Product;
 use App\Models\Category;
 use App\Models\Announcement;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Dusterio\LinkPreview\Client;
 use Illuminate\Support\Collection;
 use Spatie\Permission\Models\Role;
@@ -18,6 +18,10 @@ use Illuminate\Validation\ValidationException;
 
 class ProdutController extends Controller
 {
+
+    public function __construct(){
+        $this->middleware('auth');
+    }
     /**
      * Display a listing of the products.
      *
@@ -28,16 +32,23 @@ class ProdutController extends Controller
         $editorpage = $request->query("editorpage") ? $request->query("editorpage") : null;
         $peerpage = $request->query("peerpage") ? $request->query("peerpage") : null;
         $normalpage = $request->query("normalpage") ? $request->query("normalpage") : null;
-        $editorProducts = Product::with(["categories","histories"])
-                        ->where("is_editor_choice",true)
-                        ->paginate(6, ["*"], "page", $editorpage);
-        $peerProducts = Product::with(["categories","histories"])
+        $editorProducts = Product::with(["categories","histories"=> function ($query) {
+            return  $query->with("user");
+        }])
+        ->where("is_editor_choice",true)
+        ->paginate(6, ["*"], "page", $editorpage);
+
+        $peerProducts = Product::with(["categories","histories"=> function ($query) {
+            return $query->with("user");
+                            }])
                         ->whereHas("histories")
                         ->withCount("histories")
                         ->orderBy("histories_count", "desc")
                         ->paginate(6, ["*"], "page", $peerpage);
                       
-        $normalProducts = Product::with(["categories","histories"])
+        $normalProducts = Product::with(["categories","histories"=> function ($query) {
+                         return $query->with("user");
+                            }])
                         ->withCount("histories")
                         ->orderBy("histories_count", "desc")
                         ->paginate(6, ["*"], "page", $normalpage);
@@ -214,30 +225,44 @@ class ProdutController extends Controller
         try {
             
              $url = $request->slug;
-           
+             $now = Carbon::now()->toDateString();    
             $editorpage = $request->query("editorpage") ? $request->query("editorpage") : null;
             $peerpage = $request->query("peerpage") ? $request->query("peerpage") : null;
             $normalpage = $request->query("normalpage") ? $request->query("normalpage") : null;
-            $editorProducts = Product::with(["categories","histories"])
+            $editorProducts = Product::with(["categories","histories"  => function ($query) {
+                            $query->with("user");
+                                }])
+                            ->withCount("histories")
                             ->where("is_editor_choice",true)
                             ->whereHas('categories', function ($query) use ($url) {
                                 $query->where('slug', $url);
-                            })
+                            })  
+                            ->where('scheduled_at',"<=", $now)
+                       
+                            ->orderBy("histories_count", "desc")    
                             ->paginate(6, ["*"], "page", $editorpage);
-            $peerProducts = Product::with(["categories","histories"])
+               
+                                    
+            $peerProducts = Product::with(["categories","histories" => function ($query) {
+                            $query->with("user");
+                                }])
                             ->whereHas("histories")
                             ->withCount("histories")
                             ->whereHas('categories', function ($query) use ($url) {
                                 $query->where('slug', $url);
-                            })
+                            })  
+                            ->where('scheduled_at',"<=", $now)
                             ->orderBy("histories_count", "desc")
                             ->paginate(6, ["*"], "page", $peerpage);
-                          
-            $normalProducts = Product::with(["categories","histories"])
+                       
+            $normalProducts = Product::with(["categories","histories" => function ($query) {
+                            $query->with("user");
+                                }])
                             ->withCount("histories")
                             ->whereHas('categories', function ($query) use ($url) {
                                 $query->where('slug', $url);
                             })
+                            ->where('scheduled_at',"<=", $now)
                             ->orderBy("histories_count", "desc")
                             ->paginate(6, ["*"], "page", $normalpage);
             $products = new Collection(["peerProducts"=>$peerProducts,"editorProducts"=>$editorProducts,"normalProducts"=>$normalProducts]);

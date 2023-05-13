@@ -1,12 +1,12 @@
 @extends('Admin.layouts.master')
 @section('title', 'Products')
 @section('style')
-<link rel="stylesheet" type="text/css" href="../../../app-assets/css/plugins/forms/form-validation.css">
+<link rel="stylesheet" type="text/css" href={{asset('app-assets/css/plugins/forms/form-valid')}}"tion.css">
 <link rel="stylesheet" type="text/css" href="{{asset('app-assets/css/pages/app-user.css')}}">
-<link rel="stylesheet" type="text/css" href="../../../app-assets/css/plugins/forms/form-wizard.css">
-<link rel="stylesheet" type="text/css" href="../../../app-assets/vendors/css/pickers/pickadate/pickadate.css">
-<link rel="stylesheet" type="text/css" href="../../../app-assets/vendors/css/pickers/flatpickr/flatpickr.min.css">
-<link rel="stylesheet" type="text/css" href="../../../app-assets/css/plugins/forms/pickers/form-flat-pickr.css">
+<link rel="stylesheet" type="text/css" href={{asset('app-assets/css/plugins/forms/form-w')}}"zard.css">
+<link rel="stylesheet" type="text/css" href={{asset('app-assets/vendors/css/pickers/pickadate/pick')}}"date.css">
+<link rel="stylesheet" type="text/css" href={{asset('app-assets/vendors/css/pickers/flatpickr/flatpick')}}".min.css">
+<link rel="stylesheet" type="text/css" href={{asset('app-assets/css/plugins/forms/pickers/form-flat-')}}"ickr.css">
 <style>
    @media (min-width: 576px){
    .modal-dialog {
@@ -98,6 +98,7 @@
                             <img class="card-img-top"  src="{{ $product->image }}" alt="Card image cap" />
                             <div class="card-body">
                                 <div class="card-img-overlay">
+                                 
                                     <button class="btn btn-outline-danger text-nowrap px-1 waves-effect" style="float: right;" product_id="{{ $product->id}}"  onclick="deleteProduct(<?=  $product->id; ?>)" type="button">
                                         <i data-feather='trash-2'></i>
                                     </button>
@@ -111,12 +112,47 @@
                                     <p class="card-text text-white"></p>
                                     @endif
                                 <h4 class="card-title">{{ $product->title }}</h4>
-                                <p class="card-text" style="min-height:84px;">
+                                <p class="card-text" >
                                 {{ strlen($product->description) > 120 ? substr($product->description, 0, 120)."..." : $product->description }}   
                             </p>
                                 <div style="display: flex; flex-direction :row;justify-content:space-between">
                                     <a onclick="viewProduct({{ $product->id }},'{{ $product->link }}')" id="view-histories" class="btn btn-outline-primary">Visit Website</a>
-                                    <a style="font-size:1.3rem" class="btn btn-default"><i style="height: 1.3rem; width: 1.8rem;" data-feather='activity'></i><span class="histories-count-{{ $product->id }}">  {{ $product->histories && count($product->histories) > 0  ? count($product->histories    ) : 0  }} </span></a>
+                                    @if($product->histories->count() > 0 )
+                                    <div class="avatar-group">
+                                        @foreach($product->histories->slice(0,min([$product->histories->count(),3])) as $history)
+                                            @if($history->user->profile_image)
+                                                <div class="avatar pull-up">
+                                                    <div data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="top" title="Vinnie Mostowy" class="avatar pull-up">
+                                                        <img src="{{'/images/profile/user-upload/'.$history->user->profile_image}}" alt="Avatar" height="32" width="32" />
+                                                    </div>   
+                                                </div>   
+                                            @else    
+                                                <?php 
+                                                if (strpos($history->user->name, " ") !== false) {
+                                                    $subName = sunstr(explode($history->user->name," ")[0],0,1).sunstr(explode($history->user->name," ")[0],0,1);
+                                                }else{
+                                                    $subName = $history->user->name;
+                                                    $subName = substr($subName, 0, 2); 
+                                                }
+                                                $subName =  strtoupper( $subName );
+                                                ?>
+                                            <div class="avatar bg-primary">
+                                                <div data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="top" title="{{ $history->user->name}}" class="avatar pull-up">
+                                                    <span class="avatar-content {{ \App\Helpers\randomElementOfArray(['bg-secondary','bg-primary','bg-success','bg-danger','bg-warning','bg-info'])}}">{{ $subName}}</span>
+                                                </div>
+                                            </div>
+                                            @endif
+                                        @endforeach
+                                        @if($product->histories->count() > 3 )
+                                            <div class="avatar ">
+                                                <a  data-bs-toggle="modal" onclick="viweHistory({{$product->id}})" data-bs-target="#productClickHistory">
+                                                    <div class="avatar-content bg-primary">{{"+".$product->histories->count() - 3}}</div>
+                                                </a>
+                                            </div>
+                                          @endif   
+                                    </div>
+                                    @endif
+                                    {{-- <a style="font-size:1.3rem" class="btn btn-default"><i style="height: 1.3rem; width: 1.8rem;" data-feather='activity'></i><span class="histories-count-{{ $product->id }}">  {{ $product->histories && count($product->histories) > 0  ? count($product->histories    ) : 0  }} </span></a> --}}
                                 </div>
                             </div>
                         </div>
@@ -166,12 +202,49 @@
                                     <p class="card-text text-white"></p>
                                     @endif
                                 <h4 class="card-title">{{ $product->title }}</h4>
-                                <p class="card-text" style="min-height:84px;">
+                                <p class="card-text" >
                                 {{ strlen($product->description) > 120 ? substr($product->description, 0, 120)."..." : $product->description }}   
                             </p>
                                 <div style="display: flex; flex-direction :row;justify-content:space-between">
                                     <a onclick="viewProduct({{ $product->id }},'{{ $product->link }}')" id="view-histories" class="btn btn-outline-primary">Visit Website</a>
-                                    <a style="font-size:1.3rem" class="btn btn-default"><i style="height: 1.3rem; width: 1.8rem;" data-feather='activity'></i><span class="histories-count-{{ $product->id }}">  {{ $product->histories && count($product->histories) > 0  ? count($product->histories    ) : 0  }} </span></a>
+                                    @if($product->histories->count() > 0 )
+                                    <div class="avatar-group">
+                                        @foreach($product->histories->slice(0,min([$product->histories->count(),3])) as $history)
+                                            @if($history->user->profile_image)
+                                                <div class="avatar pull-up">
+                                                    <div data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="top" title="{{ $history->user->name}}" class="avatar pull-up">
+                                                        <img src="{{'/images/profile/user-upload/'.$history->user->profile_image}}" alt="Avatar" height="32" width="32" />
+                                                    </div>   
+                                                </div>   
+                                            @else    
+                                                <?php 
+                                                if (strpos($history->user->name, " ") !== false) {
+                                                    $subName = sunstr(explode($history->user->name," ")[0],0,1).sunstr(explode($history->user->name," ")[0],0,1);
+                                                }else{
+                                                    $subName = $history->user->name;
+                                                    $subName = substr($subName, 0, 2); 
+                                                }
+                                                $subName =  strtoupper( $subName );
+                                            
+                                                ?>
+                                            <div class="avatar bg-primary">
+                                                <div data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="top" title="{{ $history->user->name}}" class="avatar pull-up">
+                                                    <span class="avatar-content {{ \App\Helpers\randomElementOfArray(['bg-secondary','bg-primary','bg-success','bg-danger','bg-warning','bg-info'])}}">{{ $subName}}</span>
+                                                </div>
+                                             </div>
+                                            @endif
+                                        @endforeach
+                                        @if($product->histories->count() > 3 )
+                                            <div class="avatar ">
+                                                <a  data-bs-toggle="modal" onclick="viweHistory({{$product->id}})" data-bs-target="#productClickHistory">
+                                                    <div class="avatar-content bg-primary">{{"+".$product->histories->count() - 3}}</div>
+                                                </a>
+                                            </div>
+                                          @endif   
+                                    </div>
+                                    @endif
+                                   
+                                    {{-- <a style="font-size:1.3rem" class="btn btn-default"><i style="height: 1.3rem; width: 1.8rem;" data-feather='activity'></i><span class="histories-count-{{ $product->id }}">  {{ $product->histories && count($product->histories) > 0  ? count($product->histories    ) : 0  }} </span></a> --}}
                                 </div>
                             </div>
                         </div>
@@ -221,12 +294,48 @@
                                 <p class="card-text text-white"></p>
                                 @endif
                             <h4 class="card-title">{{ $product->title }}</h4>
-                            <p class="card-text" style="min-height:84px;">
-                            {{ strlen($product->description) > 120 ? substr($product->description, 0, 120)."..." : $product->description; }}   
+                            <p class="card-text" >
+                            {{ strlen($product->description) > 120 ? substr($product->description, 0, 120)."..." : $product->description }}   
                         </p>
                             <div style="display: flex; flex-direction :row;justify-content:space-between">
                                 <a onclick="viewProduct({{ $product->id }},'{{ $product->link }}')" id="view-histories" class="btn btn-outline-primary">Visit Website</a>
-                                <a style="font-size:1.3rem" class="btn btn-default"><i style="height: 1.3rem; width: 1.8rem;" data-feather='activity'></i><span class="histories-count-{{ $product->id }}">  {{ $product->histories && count($product->histories) > 0  ? count($product->histories    ) : 0  }} </span></a>
+                                @if($product->histories->count() > 0 )
+                                    <div class="avatar-group">
+                                        @foreach($product->histories->slice(0,min([$product->histories->count(),3])) as $history)
+                                            @if($history->user->profile_image)
+                                                <div class="avatar pull-up">
+                                                    <div data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="top" title="{{ $history->user->name}}" class="avatar pull-up">
+                                                        <img src="{{'/images/profile/user-upload/'.$history->user->profile_image}}" alt="Avatar" height="32" width="32" />
+                                                    </div>   
+                                                </div>   
+                                            @else    
+                                                <?php 
+                                                if (strpos($history->user->name, " ") !== false) {
+                                                    $subName = sunstr(explode($history->user->name," ")[0],0,1).sunstr(explode($history->user->name," ")[0],0,1);
+                                                }else{
+                                                    $subName = $history->user->name;
+                                                    $subName = substr($subName, 0, 2); 
+                                                }
+                                                $subName =  strtoupper( $subName );
+                                            
+                                                ?>
+                                            <div class="avatar ">
+                                                <div data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="top" title="{{ $history->user->name}}" class="avatar pull-up">
+                                                    <span class="avatar-content {{ \App\Helpers\randomElementOfArray(['bg-secondary','bg-primary','bg-success','bg-danger','bg-warning','bg-info'])}}">{{ $subName}}</span>
+                                                </div>
+                                            </div>
+                                            @endif
+                                        @endforeach
+                                        @if($product->histories->count() > 3 )
+                                            <div class="avatar ">
+                                                <a  data-bs-toggle="modal" onclick="viweHistory({{$product->id}})" data-bs-target="#productClickHistory">
+                                                    <div class="avatar-content bg-primary">{{"+".$product->histories->count() - 3}}</div>
+                                                </a>
+                                            </div>
+                                            @endif   
+                                    </div>
+                                    @endif
+                                {{-- <a style="font-size:1.3rem" class="btn btn-default"><i style="height: 1.3rem; width: 1.8rem;" data-feather='activity'></i><span class="histories-count-{{ $product->id }}">  {{ $product->histories && count($product->histories) > 0  ? count($product->histories    ) : 0  }} </span></a> --}}
                             </div>
                         </div>
                     </div>
@@ -256,7 +365,33 @@
                 </section>
                 <!-- Basic and Outline Pills end -->
 
-
+    <div class="modal fade" id="productClickHistory" tabindex="-1" aria-labelledby="productClickHistory" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="productClickHistoryTitle">Product Click History</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>User</th>
+                                    <th>Date</th>
+                                </tr>
+                            </thead>
+                            <tbody id="product-history-data">
+                                
+                            </tbody>
+                        </table>
+                    </div>
+                   
+                </div>
+            
+            </div>
+        </div>
+    </div>
 
      
   
@@ -265,27 +400,72 @@
 @endsection
 
 @section('scripts')
-    <!-- BEGIN: Vendor JS-->
-    <script src="../../../app-assets/vendors/js/vendors.min.js"></script>
-    <!-- BEGIN Vendor JS-->
-
+ 
     <!-- BEGIN: Page Vendor JS-->
-    <script src="../../../app-assets/vendors/js/forms/select/select2.full.min.js"></script>
-    <script src="../../../app-assets/vendors/js/forms/validation/jquery.validate.min.js"></script>
-    <script src="../../../app-assets/vendors/js/pickers/flatpickr/flatpickr.min.js"></script>
+    <script src="{{asset('app-assets/vendors/js/forms/select/select2.full.min.js')}}"></script>
+    <script src="{{asset('app-assets/vendors/js/forms/validation/jquery.validate.min.js')}}"></script>
+    <script src="{{asset('app-assets/vendors/js/pickers/flatpickr/flatpickr.min.js')}}"></script>
     <!-- END: Page Vendor JS-->
 
     <!-- BEGIN: Theme JS-->
-    <script src="../../../app-assets/js/core/app-menu.js"></script>
+    <script src="{{asset('app-assets/js/core/app-menu.js')}}"></script>
     <!-- END: Theme JS-->
 
     <!-- BEGIN: Page JS-->
-    <script src="../../../app-assets/js/scripts/pages/app-user-edit.js"></script>
-    <script src="../../../app-assets/js/scripts/components/components-navs.js"></script>
+    <script src="{{asset('app-assets/js/scripts/pages/app-user-edit.js')}}"></script>
+    <script src="{{asset('app-assets/js/scripts/components/components-navs.js')}}"></script>
     <!-- END: Page JS-->
 
 <script>
-function loadPaginatedData(type,page){
+    function viweHistory(productId){
+        let products = @json($paginatedData["normalProducts"]["items"]);
+        productHistory= products.find(x=>x.id == productId).histories;
+        
+       let html = '';
+        $("#product-history-data").html(html);
+        $("#productClickHistoryTitle").text(products.find(x=>x.id == productId).title + " Click History");
+        productHistory.map(x=>{
+            console.log("🚀 ~ file: products.blade.php:419 ~ viweHistory ~ productHistory =>x:", x);
+            html += '<tr>';
+            html += '<td>';
+             let output = x?.user?.profile_image && x?.user?.profile_image != '' ? ` <img src="/images/profile/user-upload/${x?.user?.profile_image}" alt="Avatar" height="32" width="32" />` : x.user.name ;
+               let username = x.user.username ?  x.user.username : x.user.name.split(" ").join("_");
+             html += '<div class="d-flex justify-content-left align-items-center">' +
+                    '<div class="avatar-wrapper">' +
+                    '<div class="avatar ' +
+                    ' {{ \App\Helpers\randomElementOfArray(['bg-secondary','bg-primary','bg-success','bg-danger','bg-warning','bg-info'])}}' +
+                    ' me-1">' +
+                    output +
+                    '</div>' +
+                    '</div>' +
+                    '<div class="d-flex flex-column">' +
+                    '<a href="#" class="user_name text-truncate"><span class="fw-bold">' +
+                    x.user.name +
+                    '</span></a>' +
+                    '<small class="emp_post text-muted">@' +
+                    username +
+                    '</small>' +
+                    '</div>' +
+                    '</div>';
+                html += '</td>';
+                html += '<td>';
+                html += (new Date(x.created_at)).toLocaleDateString("en-US", {
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+                hour: "numeric",
+                minute: "numeric",
+                second: "numeric",
+                hour12: true
+                });
+                html += '</td>';
+                html += '</tr>';
+
+        })
+        console.log("🚀 ~ file: products.blaxde.php:467 ~ viweHistory ~ html:", html)
+        $("#product-history-data").html(html);
+    }
+    function loadPaginatedData(type,page){
     ++page;
     let queryParam = "?editorpage="+page;
     switch(type){
@@ -350,7 +530,7 @@ function loadPaginatedData(type,page){
                         paginateCard += '</div>';
                         paginateCard += '<p class="card-text text-white"></p>';
                         paginateCard += `<h4 class="card-title">${ x.title }</h4>`;
-                        paginateCard += '<p class="card-text" style="min-height:84px;">';
+                        paginateCard += '<p class="card-text" >';
                         paginateCard += x.description && x.description.length > 120 ? x.description.substring(0, 120) + "..." : x.description;
                         paginateCard += ' </p>';
                         paginateCard += '  <div style="display: flex; flex-direction :row;justify-content:space-between">';

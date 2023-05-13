@@ -52,22 +52,50 @@
                         <div class="card">
                             <img class="card-img-top"  src="{{ $product->image }}" alt="Card image cap" />
                             <div class="card-body">
-                            
-                            @if (!empty($product->scheduled_at) && $product->scheduled_at > now())
-                                <div style="float:right;" class="bg-info-gradient d-flex">
-                                        <i style="margin-right: 10px; height: 1.4rem; color: #1aeaff; width: 2rem;" data-feather='clock'></i>
-                                        <p class="card-text text-dark">{{  date("d-m-Y", strtotime($product->scheduled_at)) }}</p>
-                                </div>
-                                    @else
                                     <p class="card-text text-white"></p>
-                                    @endif
                                 <h4 class="card-title">{{ $product->title }}</h4>
-                                <p class="card-text" style="min-height:84px;">
+                                <p class="card-text" >
                                 {{ strlen($product->description) > 120 ? substr($product->description, 0, 120)."..." : $product->description }}   
                             </p>
                                 <div style="display: flex; flex-direction :row;justify-content:space-between">
                                     <a onclick="viewProduct({{ $product->id }},'{{ $product->link }}')" id="view-histories" class="btn btn-outline-primary">Visit Website</a>
-                                    <a style="font-size:1.3rem" class="btn btn-default"><i style="height: 1.3rem; width: 1.8rem;" data-feather='activity'></i><span class="histories-count-{{ $product->id }}">  {{ $product->histories && count($product->histories) > 0  ? count($product->histories    ) : 0  }} </span></a>
+                                    @if($product->histories->count() > 0 )
+                                    <div class="avatar-group">
+                                        @foreach($product->histories->slice(0,min([$product->histories->count(),3])) as $history)
+                                            @if($history->users->image)
+                                                <div class="avatar pull-up">
+                                                    <div data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="top" title="{{ $history->users->name}}" class="avatar pull-up">
+                                                        <img src="{{$history->users->image}}" alt="Avatar" height="32" width="32" />
+                                                    </div>   
+                                                </div>   
+                                            @else    
+                                                <?php 
+                                                if (strpos($history->users->name, " ") !== false) {
+                                                    $subName = sunstr(explode($history->users->name," ")[0],0,1).sunstr(explode($history->users->name," ")[0],0,1);
+                                                }else{
+                                                    $subName = $history->users->name;
+                                                    $subName = substr($subName, 0, 2); 
+                                                }
+                                                $subName =  strtoupper( $subName );
+                                            
+                                                ?>
+                                            <div class="avatar bg-light-primary">
+                                                <div data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="top" title="{{ $history->users->name}}" class="avatar pull-up">
+                                                            <span class="avatar-content {{ \App\Helpers\randomElementOfArray(['bg-light-secondary','bg-light-primary','bg-light-success','bg-light-danger','bg-light-warning','bg-light-info'])}}">{{ $subName}}</span>
+                                                </div>                            
+                                            </div>
+                                            @endif
+                                        @endforeach
+                                        @if($product->histories->count() > 3 )
+                                            <div class="avatar">
+                                                <div data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="top" title="{{ $product->histories->map(function($x){ return $x->users->name; })->join(",\n")}}"  class="avatar pull-down">
+                                                    <div class="avatar-content  bg-primary">{{"+".$product->histories->count() - 3}}</div>
+                                                </div>
+                                            </div>
+                                          @endif   
+                                    </div>
+                                    @endif
+                                    {{-- <a style="font-size:1.3rem" class="btn btn-default"><i style="height: 1.3rem; width: 1.8rem;" data-feather='activity'></i><span class="histories-count-{{ $product->id }}">  {{ $product->histories && count($product->histories) > 0  ? count($product->histories    ) : 0  }} </span></a> --}}
                                 </div>
                             </div>
                         </div>
@@ -103,21 +131,55 @@
             <div class="card">
                 <img class="card-img-top"  src="{{ $product->image }}" alt="Card image cap" />
                 <div class="card-body">
-                @if (!empty($product->scheduled_at) && $product->scheduled_at > now())
+                {{-- @if (!empty($product->scheduled_at) && $product->scheduled_at > now())
                     <div style="float:right;" class="bg-info-gradient d-flex">
                             <i style="margin-right: 10px; height: 1.4rem; color: #1aeaff; width: 2rem;" data-feather='clock'></i>
                             <p class="card-text text-dark">{{  date("d-m-Y", strtotime($product->scheduled_at)) }}</p>
                     </div>
-                        @else
+                        @else --}}
                         <p class="card-text text-white"></p>
-                        @endif
+                        {{-- @endif --}}
                     <h4 class="card-title">{{ $product->title }}</h4>
-                    <p class="card-text" style="min-height:84px;">
-                    {{ strlen($product->description) > 120 ? substr($product->description, 0, 120)."..." : $product->description; }}   
+                    <p class="card-text" >
+                    {{ strlen($product->description) > 120 ? substr($product->description, 0, 120)."..." : $product->description }}   
                 </p>
                     <div style="display: flex; flex-direction :row;justify-content:space-between">
                         <a onclick="viewProduct({{ $product->id }},'{{ $product->link }}')" id="view-histories" class="btn btn-outline-primary">Visit Website</a>
-                        <a style="font-size:1.3rem" class="btn btn-default"><i style="height: 1.3rem; width: 1.8rem;" data-feather='activity'></i><span class="histories-count-{{ $product->id }}">  {{ $product->histories && count($product->histories) > 0  ? count($product->histories    ) : 0  }} </span></a>
+                        {{-- <a style="font-size:1.3rem" class="btn btn-default"><i style="height: 1.3rem; width: 1.8rem;" data-feather='activity'></i><span class="histories-count-{{ $product->id }}">  {{ $product->histories && count($product->histories) > 0  ? count($product->histories    ) : 0  }} </span></a> --}}
+                        @if($product->histories->count() > 0 )
+                            <div class="avatar-group">
+                                @foreach($product->histories->slice(0,min([$product->histories->count(),3])) as $history)
+                                    @if($history->users->image)
+                                        <div class="avatar pull-up">
+                                            <img src="{{$history->users->image}}" alt="Avatar" height="32" width="32" />
+                                        </div>   
+                                    @else    
+                                        <?php 
+                                        if (strpos($history->users->name, " ") !== false) {
+                                            $subName = sunstr(explode($history->users->name," ")[0],0,1).sunstr(explode($history->users->name," ")[0],0,1);
+                                        }else{
+                                            $subName = $history->users->name;
+                                            $subName = substr($subName, 0, 2); 
+                                        }
+                                        $subName =  strtoupper( $subName );
+                                    
+                                        ?>
+                                    <div class="avatar bg-light-primary">
+                                        <div data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="top" title="{{ $history->users->name}}" class="avatar pull-up">
+                                             <span class="avatar-content {{ \App\Helpers\randomElementOfArray(['bg-light-secondary','bg-light-primary','bg-light-success','bg-light-danger','bg-light-warning','bg-light-info'])}}">{{ $subName}}</span>
+                                        </div>                            
+                                    </div>
+                                    @endif
+                                @endforeach
+                                @if($product->histories->count() > 3 )
+                                    <div class="avatar">
+                                        <div data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="top" title="{{ $product->histories->map(function($x){ return $x->users->name; })->join(",\n")}}"  class="avatar pull-down">
+                                            <div class="avatar-content  bg-primary">{{"+".$product->histories->count() - 3}}</div>
+                                        </div>
+                                    </div>
+                                    @endif   
+                            </div>
+                            @endif
                     </div>
                 </div>
             </div>
@@ -153,22 +215,48 @@
                 <div class="card">
                     <img class="card-img-top"  src="{{ $product->image }}" alt="Card image cap" />
                     <div class="card-body">
-                    
-                    @if (!empty($product->scheduled_at) && $product->scheduled_at > now())
-                        <div style="float:right;" class="bg-info-gradient d-flex">
-                                <i style="margin-right: 10px; height: 1.4rem; color: #1aeaff; width: 2rem;" data-feather='clock'></i>
-                                <p class="card-text text-dark">{{  date("d-m-Y", strtotime($product->scheduled_at)); }}</p>
-                        </div>
-                            @else
                             <p class="card-text text-white"></p>
-                            @endif
                         <h4 class="card-title">{{ $product->title }}</h4>
-                        <p class="card-text" style="min-height:84px;">
-                        {{ strlen($product->description) > 120 ? substr($product->description, 0, 120)."..." : $product->description; }}   
+                        <p class="card-text" >
+                        {{ strlen($product->description) > 120 ? substr($product->description, 0, 120)."..." : $product->description }}   
                     </p>
                         <div style="display: flex; flex-direction :row;justify-content:space-between">
                             <a onclick="viewProduct({{ $product->id }},'{{ $product->link }}')" id="view-histories" class="btn btn-outline-primary">Visit Website</a>
-                            <a style="font-size:1.3rem" class="btn btn-default"><i style="height: 1.3rem; width: 1.8rem;" data-feather='activity'></i><span class="histories-count-{{ $product->id }}">  {{ $product->histories && count($product->histories) > 0  ? count($product->histories    ) : 0  }} </span></a>
+                            @if($product->histories->count() > 0 )
+                                    <div class="avatar-group">
+                                        @foreach($product->histories->slice(0,min([$product->histories->count(),3])) as $history)
+                                            @if($history->users->image)
+                                                <div class="avatar pull-up">
+                                                    <img src="{{$history->users->image}}" alt="Avatar" height="32" width="32" />
+                                                </div>   
+                                            @else    
+                                                <?php 
+                                                if (strpos($history->users->name, " ") !== false) {
+                                                    $subName = sunstr(explode($history->users->name," ")[0],0,1).sunstr(explode($history->users->name," ")[0],0,1);
+                                                }else{
+                                                    $subName = $history->users->name;
+                                                    $subName = substr($subName, 0, 2); 
+                                                }
+                                                $subName =  strtoupper( $subName );
+                                            
+                                                ?>
+                                            <div class="avatar bg-light-primary">
+                                                <div data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="top" title="{{ $history->users->name}}" class="avatar pull-up">
+                                                    <span class="avatar-content {{ \App\Helpers\randomElementOfArray(['bg-light-secondary','bg-light-primary','bg-light-success','bg-light-danger','bg-light-warning','bg-light-info'])}}">{{ $subName}}</span>
+                                        </div>                            
+                                            </div>
+                                            @endif
+                                        @endforeach
+                                        @if($product->histories->count() > 3 )
+                                            <div class="avatar">
+                                                <div data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="top" title="{{ $product->histories->map(function($x){ return $x->users->name; })->join(",\n")}}"  class="avatar pull-down">
+                                                    <div class="avatar-content  bg-primary">{{"+".$product->histories->count() - 3}}</div>
+                                                </div>
+                                            </div>
+                                          @endif   
+                                    </div>
+                                    @endif
+                            {{-- <a style="font-size:1.3rem" class="btn btn-default"><i style="height: 1.3rem; width: 1.8rem;" data-feather='activity'></i><span class="histories-count-{{ $product->id }}">  {{ $product->histories && count($product->histories) > 0  ? count($product->histories    ) : 0  }} </span></a> --}}
                         </div>
                     </div>
                 </div>
@@ -199,25 +287,20 @@
     </div>		
 @endsection
 @section('scripts')
-    <!-- BEGIN: Vendor JS-->
-    <script src="../../../app-assets/vendors/js/vendors.min.js"></script>
-    <!-- BEGIN Vendor JS-->
-
     <!-- BEGIN: Page Vendor JS-->
-    <script src="../../../app-assets/vendors/js/forms/select/select2.full.min.js"></script>
-    <script src="../../../app-assets/vendors/js/forms/validation/jquery.validate.min.js"></script>
-    <script src="../../../app-assets/vendors/js/pickers/flatpickr/flatpickr.min.js"></script>
+    <script src="{{asset('app-assets/vendors/js/forms/select/select2.full.min.js')}}"></script>
+    <script src="{{asset('app-assets/vendors/js/forms/validation/jquery.validate.min.js')}}"></script>
+    <script src="{{asset('app-assets/vendors/js/pickers/flatpickr/flatpickr.min.js')}}"></script>
     <!-- END: Page Vendor JS-->
 
     <!-- BEGIN: Theme JS-->
-    <script src="../../../app-assets/js/core/app-menu.js"></script>
+    <script src="{{asset('app-assets/js/core/app-menu.js')}}"></script>
     <!-- END: Theme JS-->
 
     <!-- BEGIN: Page JS-->
-    <script src="../../../app-assets/js/scripts/pages/app-user-edit.js"></script>
-    <script src="../../../app-assets/js/scripts/components/components-navs.js"></script>
+    <script src="{{asset('app-assets/js/scripts/pages/app-user-edit.js')}}"></script>
+    <script src="{{asset('app-assets/js/scripts/components/components-navs.js')}}"></script>
     <!-- END: Page JS-->
-
 <script>
 function loadPaginatedData(type,page){
     ++page;
@@ -279,7 +362,7 @@ function loadPaginatedData(type,page){
                         paginateCard += '</div>';
                         paginateCard += '<p class="card-text text-white"></p>';
                         paginateCard += `<h4 class="card-title">${ x.title }</h4>`;
-                        paginateCard += '<p class="card-text" style="min-height:84px;">';
+                        paginateCard += '<p class="card-text" >';
                         paginateCard += x.description && x.description.length > 120 ? x.description.substring(0, 120) + "..." : x.description;
                         paginateCard += ' </p>';
                         paginateCard += '  <div style="display: flex; flex-direction :row;justify-content:space-between">';
@@ -342,7 +425,7 @@ function viewProduct(id,url){
                         icon: "success",
                         title: "Product is successfully Viewed!"
                     });
-                    $(".histories-count-"+id).html(response.length);
+                    // $(".histories-count-"+id).html(response.length);
                     window.open(url);
                 }
             }

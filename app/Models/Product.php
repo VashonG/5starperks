@@ -15,4 +15,5 @@ class Product extends Model
     public function categories(){
         return $this->hasOne(Category::class,"id","category_id");
     }
+    
 }

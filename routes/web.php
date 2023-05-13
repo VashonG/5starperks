@@ -37,6 +37,7 @@ Route::group(['middleware' => ['permission:customers_dashboard']], function () {
 });
  // products
  Route::get('/products/{slug}', 'ProdutController@getProducts')->name('products');
+ Route::get('products/{id}/view','ProdutController@redirectUrl');
 
 // Admin Routes
 Route::group(['middleware' => ['permission:dashboard']], function () {
@@ -55,8 +56,7 @@ Route::group(['middleware' => ['permission:dashboard']], function () {
 
     // ProdutController
     Route::resource('products', ProdutController::class);
-    Route::get('products/{id}/view','ProdutController@redirectUrl');
-
+    
     // ProdutController
      Route::get('addProduct', 'ProdutController@addProduct');
      Route::post('scrapUrlData', 'ProdutController@scrapUrlData');
