@@ -6,8 +6,8 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=0,minimal-ui">
-    <meta name="description" content="Vuexy admin is super flexible, powerful, clean &amp; modern responsive bootstrap 4 admin template with unlimited possibilities.">
-    <meta name="keywords" content="admin template, Vuexy admin template, dashboard template, flat admin template, responsive admin template, web app">
+    <meta name="description" content="5 Star Perks is a leading affiliated marketing company, offering a range of marketing services to businesses worldwide. Our team of experts helps companies to grow their online presence, increase brand awareness, and drive sales through effective marketing strategies. Contact us today to learn more about how we can help your business succeed.">
+    <meta name="keywords" content="5 Star Perks, affiliated marketing company, marketing, earning, money, companies">
     <meta name="author" content="Saad Raza">
     <title>Login Page - 5 Star Perks</title>
     <link rel="apple-touch-icon" href="../../../app-assets/images/ico/apple-icon-120.png">

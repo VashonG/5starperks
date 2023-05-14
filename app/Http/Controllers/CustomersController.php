@@ -3,14 +3,14 @@
 namespace App\Http\Controllers;
 
 
-use Illuminate\Http\Request;
-use App\Models\User;
-use Illuminate\Validation\ValidationException;
-use Spatie\Permission\Models\Role;
+use DB;
 use DataTables;
+use App\Models\User;
+use Illuminate\Http\Request;
+use Spatie\Permission\Models\Role;
 use App\Http\Controllers\Throwable;
 use Illuminate\Support\Facades\Hash;
-use DB;
+use Illuminate\Validation\ValidationException;
 
 class CustomersController extends Controller
 {
@@ -114,7 +114,8 @@ class CustomersController extends Controller
      */
     public function show($id)
     {
-        $data = User::find($id);
+        $data = User::with("views")->find($id);
+        dd($data);
         foreach($data as $key => $value){
             if($data['profile_image'] == null || $data['profile_image'] == ''){
                 $data->profile_image = 'profile.png';

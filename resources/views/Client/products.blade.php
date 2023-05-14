@@ -62,33 +62,34 @@
                                     @if($product->histories->count() > 0 )
                                     <div class="avatar-group">
                                         @foreach($product->histories->slice(0,min([$product->histories->count(),3])) as $history)
-                                            @if($history->users->image)
+                                            @if($history->user->image)
                                                 <div class="avatar pull-up">
-                                                    <div data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="top" title="{{ $history->users->name}}" class="avatar pull-up">
-                                                        <img src="{{$history->users->image}}" alt="Avatar" height="32" width="32" />
+                                                    <div data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="top" title="{{ $history->user->name}}" class="avatar pull-up">
+                                                        <img src="{{$history->user->image}}" alt="Avatar" height="32" width="32" />
                                                     </div>   
                                                 </div>   
                                             @else    
                                                 <?php 
-                                                if (strpos($history->users->name, " ") !== false) {
-                                                    $subName = sunstr(explode($history->users->name," ")[0],0,1).sunstr(explode($history->users->name," ")[0],0,1);
+                                                if (strpos($history->user->name, " ") !== false) {
+                                                    $nameList = array_values(array_filter(explode(" ",$history->user->name)));
+                                                    $subName = substr($nameList[0],0,1).substr($nameList[1],0,1);
                                                 }else{
-                                                    $subName = $history->users->name;
+                                                    $subName = $history->user->name;
                                                     $subName = substr($subName, 0, 2); 
                                                 }
                                                 $subName =  strtoupper( $subName );
                                             
                                                 ?>
-                                            <div class="avatar bg-light-primary">
-                                                <div data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="top" title="{{ $history->users->name}}" class="avatar pull-up">
-                                                            <span class="avatar-content {{ \App\Helpers\randomElementOfArray(['bg-light-secondary','bg-light-primary','bg-light-success','bg-light-danger','bg-light-warning','bg-light-info'])}}">{{ $subName}}</span>
+                                            <div class="avatar bg-primary">
+                                                <div data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="top" title="{{ $history->user->name}}" class="avatar pull-up">
+                                                            <span class="avatar-content {{ \App\Helpers\randomElementOfArray(['bg-secondary','bg-primary','bg-success','bg-danger','bg-warning','bg-info'])}}">{{ $subName}}</span>
                                                 </div>                            
                                             </div>
                                             @endif
                                         @endforeach
                                         @if($product->histories->count() > 3 )
                                             <div class="avatar">
-                                                <div data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="top" title="{{ $product->histories->map(function($x){ return $x->users->name; })->join(",\n")}}"  class="avatar pull-down">
+                                                <div data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="top" title="{{ $product->histories->map(function($x){ return $x->user->name; })->join(",\n")}}"  class="avatar pull-down">
                                                     <div class="avatar-content  bg-primary">{{"+".$product->histories->count() - 3}}</div>
                                                 </div>
                                             </div>
@@ -149,31 +150,32 @@
                         @if($product->histories->count() > 0 )
                             <div class="avatar-group">
                                 @foreach($product->histories->slice(0,min([$product->histories->count(),3])) as $history)
-                                    @if($history->users->image)
+                                    @if($history->user->image)
                                         <div class="avatar pull-up">
-                                            <img src="{{$history->users->image}}" alt="Avatar" height="32" width="32" />
+                                            <img src="{{$history->user->image}}" alt="Avatar" height="32" width="32" />
                                         </div>   
                                     @else    
                                         <?php 
-                                        if (strpos($history->users->name, " ") !== false) {
-                                            $subName = sunstr(explode($history->users->name," ")[0],0,1).sunstr(explode($history->users->name," ")[0],0,1);
+                                        if (strpos($history->user->name, " ") !== false) {
+                                            $nameList = array_values(array_filter(explode(" ",$history->user->name)));
+                                            $subName = substr($nameList[0],0,1).substr($nameList[1],0,1);
                                         }else{
-                                            $subName = $history->users->name;
+                                            $subName = $history->user->name;
                                             $subName = substr($subName, 0, 2); 
                                         }
                                         $subName =  strtoupper( $subName );
                                     
                                         ?>
-                                    <div class="avatar bg-light-primary">
-                                        <div data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="top" title="{{ $history->users->name}}" class="avatar pull-up">
-                                             <span class="avatar-content {{ \App\Helpers\randomElementOfArray(['bg-light-secondary','bg-light-primary','bg-light-success','bg-light-danger','bg-light-warning','bg-light-info'])}}">{{ $subName}}</span>
+                                    <div class="avatar bg-primary">
+                                        <div data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="top" title="{{ $history->user->name}}" class="avatar pull-up">
+                                             <span class="avatar-content {{ \App\Helpers\randomElementOfArray(['bg-secondary','bg-primary','bg-success','bg-danger','bg-warning','bg-info'])}}">{{ $subName}}</span>
                                         </div>                            
                                     </div>
                                     @endif
                                 @endforeach
                                 @if($product->histories->count() > 3 )
                                     <div class="avatar">
-                                        <div data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="top" title="{{ $product->histories->map(function($x){ return $x->users->name; })->join(",\n")}}"  class="avatar pull-down">
+                                        <div data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="top" title="{{ $product->histories->map(function($x){ return $x->user->name; })->join(",\n")}}"  class="avatar pull-down">
                                             <div class="avatar-content  bg-primary">{{"+".$product->histories->count() - 3}}</div>
                                         </div>
                                     </div>
@@ -225,31 +227,32 @@
                             @if($product->histories->count() > 0 )
                                     <div class="avatar-group">
                                         @foreach($product->histories->slice(0,min([$product->histories->count(),3])) as $history)
-                                            @if($history->users->image)
+                                            @if($history->user->image)
                                                 <div class="avatar pull-up">
-                                                    <img src="{{$history->users->image}}" alt="Avatar" height="32" width="32" />
+                                                    <img src="{{$history->user->image}}" alt="Avatar" height="32" width="32" />
                                                 </div>   
                                             @else    
                                                 <?php 
-                                                if (strpos($history->users->name, " ") !== false) {
-                                                    $subName = sunstr(explode($history->users->name," ")[0],0,1).sunstr(explode($history->users->name," ")[0],0,1);
+                                                if (strpos($history->user->name, " ") !== false) {
+                                                    $nameList = array_values(array_filter(explode(" ",$history->user->name)));
+                                                    $subName = substr($nameList[0],0,1).substr($nameList[1],0,1);
                                                 }else{
-                                                    $subName = $history->users->name;
+                                                    $subName = $history->user->name;
                                                     $subName = substr($subName, 0, 2); 
                                                 }
                                                 $subName =  strtoupper( $subName );
                                             
                                                 ?>
-                                            <div class="avatar bg-light-primary">
-                                                <div data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="top" title="{{ $history->users->name}}" class="avatar pull-up">
-                                                    <span class="avatar-content {{ \App\Helpers\randomElementOfArray(['bg-light-secondary','bg-light-primary','bg-light-success','bg-light-danger','bg-light-warning','bg-light-info'])}}">{{ $subName}}</span>
+                                            <div class="avatar bg-primary">
+                                                <div data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="top" title="{{ $history->user->name}}" class="avatar pull-up">
+                                                    <span class="avatar-content {{ \App\Helpers\randomElementOfArray(['bg-secondary','bg-primary','bg-success','bg-danger','bg-warning','bg-info'])}}">{{ $subName}}</span>
                                         </div>                            
                                             </div>
                                             @endif
                                         @endforeach
                                         @if($product->histories->count() > 3 )
                                             <div class="avatar">
-                                                <div data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="top" title="{{ $product->histories->map(function($x){ return $x->users->name; })->join(",\n")}}"  class="avatar pull-down">
+                                                <div data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="top" title="{{ $product->histories->map(function($x){ return $x->user->name; })->join(",\n")}}"  class="avatar pull-down">
                                                     <div class="avatar-content  bg-primary">{{"+".$product->histories->count() - 3}}</div>
                                                 </div>
                                             </div>
@@ -320,7 +323,7 @@ function loadPaginatedData(type,page){
     }
 
         $.ajax({
-        url: `products/${queryParam}`,
+        url: `{{ url('/products') }}${queryParam}`,
         type: "GET",
         headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -408,8 +411,8 @@ function formatDate(date){
 }
 function viewProduct(id,url){
     $.ajax({
-            url: `products/${id}/view?redirect_url=${url}` ,
-            type: "GET",
+             url: `{{ url('/products') }}/${id}/view?redirect_url=${url}`,
+           type: "GET",
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             },

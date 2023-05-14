@@ -19,6 +19,7 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
+        'id',
         'name',
         'email',
         'password',
@@ -46,6 +47,6 @@ class User extends Authenticatable
 
     public function views()
     {
-        return $this->hasMany(ProductClickHistory::class,"id","user_id");
+        return $this->hasMany(ProductClickHistory::class);
     }
 }
