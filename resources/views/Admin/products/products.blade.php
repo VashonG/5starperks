@@ -129,7 +129,7 @@
                                             @else    
                                                 <?php 
                                                 if (strpos($history->user->name, " ") !== false) {
-                                                    $subName = sunstr(explode($history->user->name," ")[0],0,1).sunstr(explode($history->user->name," ")[0],0,1);
+                                                    $subName = substr(explode($history->user->name," ")[0],0,1).substr(explode($history->user->name," ")[0],0,1);
                                                 }else{
                                                     $subName = $history->user->name;
                                                     $subName = substr($subName, 0, 2); 
@@ -219,7 +219,7 @@
                                             @else    
                                                 <?php 
                                                 if (strpos($history->user->name, " ") !== false) {
-                                                    $subName = sunstr(explode($history->user->name," ")[0],0,1).sunstr(explode($history->user->name," ")[0],0,1);
+                                                    $subName = substr(explode($history->user->name," ")[0],0,1).substr(explode($history->user->name," ")[0],0,1);
                                                 }else{
                                                     $subName = $history->user->name;
                                                     $subName = substr($subName, 0, 2); 
@@ -311,7 +311,7 @@
                                             @else    
                                                 <?php 
                                                 if (strpos($history->user->name, " ") !== false) {
-                                                    $subName = sunstr(explode($history->user->name," ")[0],0,1).sunstr(explode($history->user->name," ")[0],0,1);
+                                                    $subName = substr(explode($history->user->name," ")[0],0,1).substr(explode($history->user->name," ")[0],0,1);
                                                 }else{
                                                     $subName = $history->user->name;
                                                     $subName = substr($subName, 0, 2); 

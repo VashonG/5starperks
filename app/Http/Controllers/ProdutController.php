@@ -237,7 +237,11 @@ class ProdutController extends Controller
                             ->whereHas('categories', function ($query) use ($url) {
                                 $query->where('slug', $url);
                             })  
-                            ->where('scheduled_at',"<=", $now)
+                            ->orWhere(function($q) use ($now){
+                                $q->orWhere('scheduled_at',"<=", $now)
+                                    ->orWhereNull('scheduled_at');
+                                
+                            })  
                        
                             ->orderBy("histories_count", "desc")    
                             ->paginate(6, ["*"], "page", $editorpage);
@@ -251,7 +255,11 @@ class ProdutController extends Controller
                             ->whereHas('categories', function ($query) use ($url) {
                                 $query->where('slug', $url);
                             })  
-                            ->where('scheduled_at',"<=", $now)
+                            ->orWhere(function($q) use ($now){
+                                $q->orWhere('scheduled_at',"<=", $now)
+                                    ->orWhereNull('scheduled_at');
+                                
+                            })  
                             ->orderBy("histories_count", "desc")
                             ->paginate(6, ["*"], "page", $peerpage);
                        
@@ -262,7 +270,11 @@ class ProdutController extends Controller
                             ->whereHas('categories', function ($query) use ($url) {
                                 $query->where('slug', $url);
                             })
-                            ->where('scheduled_at',"<=", $now)
+                            ->orWhere(function($q) use ($now){
+                                $q->orWhere('scheduled_at',"<=", $now)
+                                    ->orWhereNull('scheduled_at');
+                                
+                            })  
                             ->orderBy("histories_count", "desc")
                             ->paginate(6, ["*"], "page", $normalpage);
             $products = new Collection(["peerProducts"=>$peerProducts,"editorProducts"=>$editorProducts,"normalProducts"=>$normalProducts]);
