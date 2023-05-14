@@ -114,16 +114,17 @@ class CustomersController extends Controller
      */
     public function show($id)
     {
-        $data = User::with("views")->find($id);
-        dd($data);
-        foreach($data as $key => $value){
-            if($data['profile_image'] == null || $data['profile_image'] == ''){
+        $data = User::with(["views"=>function($q){
+            $q->with("product");
+        }])->find($id);
+       
+            if($data->profile_image == null || $data->profile_image == ''){
                 $data->profile_image = 'profile.png';
             }
-            if($data['username'] == null || $data['username'] == ''){
+            if($data->username == null || $data->username == ''){
                 $data->username = strtolower(str_replace(' ', '_',  $data["name"]));
             }
-        }
+        
         return view('Admin.customers.viewCustomers',compact('data'));
     }
 
