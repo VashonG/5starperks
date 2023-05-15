@@ -86,7 +86,7 @@ class SellerController extends Controller
                 $user = new User();
                 $user->name = $request->name;
                 $user->email = $request->email;
-                $user->password = Hash::make($request->password);
+                $user->password = bcrypt($request->password);
                 $user->username = $request->username;
                 $user->phone_no = $request->phoneNumber;
                 $user->address = $request->address;
@@ -214,7 +214,7 @@ class SellerController extends Controller
            $user->name = $request->first_name.' '.$request->last_name;
            $name = $request->first_name.' '.$request->last_name;
            $user->email = $request->email;
-           $user->password = Hash::make($request->password);
+           $user->password = bcrypt($request->password);
            $user->username = strtolower(str_replace(' ', '_', $name)).rand();
            $user->phone_no = $request->phone;
            $user->address = $request->address;

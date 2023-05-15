@@ -81,7 +81,9 @@ class CustomersController extends Controller
                 $user = new User();
                 $user->name = $request->name;
                 $user->email = $request->email;
-                $user->password = Hash::make($request->password);
+                $user->password = bcrypt($request->password);
+                
+                
                 $user->username = $request->username;
                 $user->phone_no = $request->phoneNumber;
                 $user->address = $request->address;
@@ -114,16 +116,17 @@ class CustomersController extends Controller
      */
     public function show($id)
     {
-        $data = User::with("views")->find($id);
-     
-        foreach($data as $key => $value){
-            if($data['profile_image'] == null || $data['profile_image'] == ''){
+        $data = User::with(["views"=>function($q){
+            $q->with("product");
+        }])->find($id) ;
+       
+            if($data->profile_image == null || $data->profile_image == ''){
                 $data->profile_image = 'profile.png';
             }
-            if($data['username'] == null || $data['username'] == ''){
+            if($data->username == null || $data->username == ''){
                 $data->username = strtolower(str_replace(' ', '_',  $data["name"]));
             }
-        }
+        
         return view('Admin.customers.viewCustomers',compact('data'));
     }
 
@@ -137,6 +140,7 @@ class CustomersController extends Controller
     {
         //
         $data = User::find($id);
+        
         foreach($data as $key => $value){
             if($data['profile_image'] == null || $data['profile_image'] == ''){
                 $data->profile_image = 'profile.png';

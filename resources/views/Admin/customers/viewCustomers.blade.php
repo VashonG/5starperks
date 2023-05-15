@@ -34,7 +34,7 @@
                         <div class="card-body">
                             <div class="user-avatar-section">
                                 <div class="d-flex align-items-center flex-column">
-                                    <img class="img-fluid rounded mt-3 mb-2" src="../../../app-assets/images/portrait/small/avatar-s-2.jpg" height="110" width="110" alt="User avatar" />
+                                    <img class="img-fluid rounded mt-3 mb-2" src="{{asset('images/profile/user-upload')."/".$data->profile_image}}" height="110" width="110" alt="User avatar" />
                                     <div class="user-info text-center">
                                         <h4>{{$data->name}}</h4>
                                         <span class="badge bg-light-secondary">Customers</span>
@@ -47,8 +47,8 @@
                                         <i data-feather="check" class="font-medium-2"></i>
                                     </span>
                                     <div class="ms-75">
-                                        <h4 class="mb-0">1.23k</h4>
-                                        <small>Tasks Done</small>
+                                        <h4 class="mb-0">{{ $data->Views->count() }}</h4>
+                                        <small>Product Viewed</small>
                                     </div>
                                 </div>
                                 <div class="d-flex align-items-start">
@@ -57,7 +57,7 @@
                                     </span>
                                     <div class="ms-75">
                                         <h4 class="mb-0">568</h4>
-                                        <small>Projects Done</small>
+                                        <small>Sales Done</small>
                                     </div>
                                 </div>
                             </div>
@@ -66,27 +66,32 @@
                                 <ul class="list-unstyled">
                                     <li class="mb-75">
                                         <span class="fw-bolder me-25">Username:</span>
-                                        <span>violet.dev</span>
+                                        <span>{{ "@".$data->username}}</span>
                                     </li>
                                     <li class="mb-75">
                                         <span class="fw-bolder me-25">Billing Email:</span>
-                                        <span>vafgot@vultukir.org</span>
+                                        <span>{{ $data->email }}</span>
                                     </li>
                                     <li class="mb-75">
+                                        
                                         <span class="fw-bolder me-25">Status:</span>
-                                        <span class="badge bg-light-success">Active</span>
+                                        @if( $data->is_active)
+                                        <span class="badge bg-light-success"> Active</span>
+                                        @else
+                                        <span class="badge bg-light-danger"> Inactive</span>
+                                        @endif
                                     </li>
                                     <li class="mb-75">
                                         <span class="fw-bolder me-25">Role:</span>
-                                        <span>Author</span>
+                                        <span>Customer</span>
                                     </li>
                                     <li class="mb-75">
-                                        <span class="fw-bolder me-25">Tax ID:</span>
-                                        <span>Tax-8965</span>
+                                        <span class="fw-bolder me-25">Date Of Birth:</span>
+                                        <span>{{ $data->date_of_birth }}</span>
                                     </li>
                                     <li class="mb-75">
-                                        <span class="fw-bolder me-25">Contact:</span>
-                                        <span>+1 (609) 933-44-22</span>
+                                        <span class="fw-bolder me-25">Register At:</span>
+                                        <span>{{ Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $data->created_at)->format('F j, Y') }}</span>
                                     </li>
                                     <li class="mb-75">
                                         <span class="fw-bolder me-25">Language:</span>
@@ -180,23 +185,80 @@
                         <div role="tabpanel" class="tab-pane active" id="account" aria-labelledby="account-tab" aria-expanded="true">
                             <!-- Project table -->
                             <div class="card">
-                                <h4 class="card-header">User's Projects List</h4>
+                                <h4 class="card-header">Sales List</h4>
                                 <div class="table-responsive">
                                     <table class="table datatable-project">
                                         <thead>
                                             <tr>
                                                 <th></th>
-                                                <th>Project</th>
-                                                <th class="text-nowrap">Total Task</th>
-                                                <th>Progress</th>
-                                                <th>Hours</th>
+                                                <th>User</th>
+                                              
+                                                <th class="text-nowrap">Plan</th>
+                                                <th>Registered At</th>
                                             </tr>
                                         </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>1</td>
+                                                <td>
+                                                     <div class="d-flex justify-content-left align-items-center"> 
+                                                    <div class="avatar-wrapper"> 
+                                                        <div class="avatar me-1">
+                                                        <img src="../../../app-assets/images/portrait/small/avatar-s-7.jpg" alt="Avatar" width="32" height="32" />
+                                                        </div>
+                                                        </div>
+                                                        <div class="d-flex flex-column">
+                                                        <a href="#" class="user_name text-truncate"><span class="fw-bold">
+                                                        Ali Haider
+                                                        </span></a>
+                                                        <small class="emp_post text-muted">@alihaider12
+                                                        </small>
+                                                        </div>
+                                                    </div>
+                                            </td>
+                                         
+                                            <td>
+                                                <span class="d-flex justify-content-center badge bg-light-primary">
+                                                    <span class="mb-0 text-primary">$</span>
+                                                    <sup class="h5 pricing-currency text-primary mt-1 mb-0">99</sup>
+                                                    <sub class="pricing-duration font-small-4 ms-25 mt-auto mb-2">/month</sub>
+                                                </span>
+                                            </td>
+                                            <td>December 12,2023</td>
+                                            </tr>
+                                            <tr>
+                                                <td>2</td>
+                                                <td>
+                                                     <div class="d-flex justify-content-left align-items-center"> 
+                                                    <div class="avatar-wrapper"> 
+                                                        <div class="avatar me-1">
+                                                        <img src="../../../app-assets/images/portrait/small/avatar-s-3.jpg" alt="Avatar" width="32" height="32" />
+                                                        </div>
+                                                        </div>
+                                                        <div class="d-flex flex-column">
+                                                        <a href="#" class="user_name text-truncate"><span class="fw-bold">
+                                                        Ali Badi
+                                                        </span></a>
+                                                        <small class="emp_post text-muted">@aliBadi
+                                                        </small>
+                                                        </div>
+                                                    </div>
+                                            </td>
+                                         
+                                            <td>
+                                                <span class="d-flex justify-content-center badge bg-light-primary">
+                                                    <span class="mb-0 text-primary">$</span>
+                                                    <sup class="h5 pricing-currency text-primary mt-1 mb-0">199</sup>
+                                                    <sub class="pricing-duration font-small-4 ms-25 mt-auto mb-2">/month</sub>
+                                                </span>
+                                            </td>
+                                            <td>December 12,2023</td>
+                                            </tr>
+                                        </tbody>
                                     </table>
                                 </div>
                             </div>
                             <!-- /Project table -->
-
                             <!-- Activity Timeline -->
                             <div class="card">
                                 <h4 class="card-header">User Activity Timeline</h4>
@@ -261,19 +323,49 @@
                             <!-- /Activity Timeline -->
 
                             <!-- Invoice table -->
-                            <div class="card">
-                                <table class="invoice-table table text-nowrap">
-                                    <thead>
-                                        <tr>
-                                            <th></th>
-                                            <th>#ID</th>
-                                            <th><i data-feather="trending-up"></i></th>
-                                            <th>TOTAL Paid</th>
-                                            <th class="text-truncate">Issued Date</th>
-                                            <th class="cell-fit">Actions</th>
-                                        </tr>
-                                    </thead>
-                                </table>
+                             <div class="card">
+                                <h4 class="card-header">Invices</h4>
+                                <div class="table-responsive">
+                                    <table class="table datatable-project">
+                                        <thead>
+                                            <tr>
+                                                <th>Id</th>
+                                                <th class="text-nowrap">Plan</th>
+                                                <th>Source</th>
+                                                <th>Date</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>1</td>
+                                                <td>
+                                                    <span class="d-flex justify-content-center badge bg-light-primary">
+                                                        <span class="mb-0 text-primary">$</span>
+                                                        <sup class="h5 pricing-currency text-primary mt-1 mb-0">99</sup>
+                                                        <sub class="pricing-duration font-small-4 ms-25 mt-auto mb-2">/month</sub>
+                                                    </span>
+                                                </td>
+                                                <td>
+                                                    Stripe
+                                                </td>
+                                                <td>December 12,2023</td>
+                                            </tr>
+                                            <tr>
+                                                <td>2</td>
+                                               
+                                            <td>
+                                                <span class="d-flex justify-content-center badge bg-light-primary">
+                                                    <span class="mb-0 text-primary">$</span>
+                                                    <sup class="h5 pricing-currency text-primary mt-1 mb-0">199</sup>
+                                                    <sub class="pricing-duration font-small-4 ms-25 mt-auto mb-2">/month</sub>
+                                                </span>
+                                            </td>
+                                            <td>Stripe</td>
+                                            <td>December 12,2023</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                             <!-- /Invoice table -->
                         </div>
@@ -657,13 +749,13 @@
 
 @endsection
 @section('scripts')
-<script src="../../../app-assets/vendors/js/forms/validation/jquery.validate.min.js"></script>
+{{-- <script src="../../../app-assets/vendors/js/forms/validation/jquery.validate.min.js"></script>
 <script src="../../../app-assets/vendors/js/pickers/flatpickr/flatpickr.min.js"></script>
 <script src="../../../app-assets/vendors/js/pickers/pickadate/picker.js"></script>
 <script src="../../../app-assets/vendors/js/pickers/pickadate/picker.date.js"></script>
 <script src="../../../app-assets/vendors/js/forms/cleave/cleave.min.js"></script>
 <script src="../../../app-assets/vendors/js/forms/cleave/addons/cleave-phone.us.js"></script>
-<script src="../../../app-assets/js/scripts/forms/form-input-mask.js"></script>
+<script src="../../../app-assets/js/scripts/forms/form-input-mask.js"></script> --}}
 <script>
       function delete_customer(id) {
     if (confirm("Are You sure want to Delete !")) {

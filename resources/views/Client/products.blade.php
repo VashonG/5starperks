@@ -89,7 +89,7 @@
                                         @endforeach
                                         @if($product->histories->count() > 3 )
                                             <div class="avatar">
-                                                <div data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="top" title="{{ $product->histories->map(function($x){ return $x->user->name; })->join(",\n")}}"  class="avatar pull-down">
+                                                <div data-bs-toggle="tooltip" data-popup="tooltip-custom"  title="{{ $product->histories->map(function($x,$i) use ($product) { $names = ''; if($i ==0 ){ $name = "<ul>";} $name = '<li>'.$x.'</li>';  if($i == $product->histories->count() ){ $name = "</ul>";}  return $name; })->join("")}}" data-bs-html='true'   class="avatar pull-down">
                                                     <div class="avatar-content  bg-primary">{{"+".$product->histories->count() - 3}}</div>
                                                 </div>
                                             </div>
@@ -175,7 +175,7 @@
                                 @endforeach
                                 @if($product->histories->count() > 3 )
                                     <div class="avatar">
-                                        <div data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="top" title="{{ $product->histories->map(function($x){ return $x->user->name; })->join(",\n")}}"  class="avatar pull-down">
+                                        <div data-bs-toggle="tooltip" data-popup="tooltip-custom" title="{{ $product->histories->map(function($x,$i) use ($product) { $names = ''; if($i ==0 ){ $name = "<ul>";} $name = '<li>'.$x->user->name.'</li>';  if($i == $product->histories->count() ){ $name = "</ul>";}  return $name; })->join("")}}" data-bs-html='true'   class="avatar pull-down">
                                             <div class="avatar-content  bg-primary">{{"+".$product->histories->count() - 3}}</div>
                                         </div>
                                     </div>
@@ -252,7 +252,7 @@
                                         @endforeach
                                         @if($product->histories->count() > 3 )
                                             <div class="avatar">
-                                                <div data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="top" title="{{ $product->histories->map(function($x){ return $x->user->name; })->join(",\n")}}"  class="avatar pull-down">
+                                                <div data-bs-toggle="tooltip" data-popup="tooltip-custom" title="{{ $product->histories->map(function($x,$i) use ($product) { $names = ''; if($i ==0 ){ $name = "<ul>";} $name = '<li>'.$x->user->name.'</li>';  if($i == $product->histories->count() ){ $name = "</ul>";}  return $name; })->join("")}}" data-bs-html='true'   class="avatar pull-down">
                                                     <div class="avatar-content  bg-primary">{{"+".$product->histories->count() - 3}}</div>
                                                 </div>
                                             </div>

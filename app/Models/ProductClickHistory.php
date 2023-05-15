@@ -11,7 +11,7 @@ class ProductClickHistory extends Model
     protected $table="product_clicks_histories";
     protected $fillable = ['id','product_id','user_id','created_at'];
     
-    public function products(){
+    public function product(){
         return $this->belongsTo(Product::class,'product_id');
     }
     public function user(){
