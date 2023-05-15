@@ -115,7 +115,7 @@ class CustomersController extends Controller
     public function show($id)
     {
         $data = User::with("views")->find($id);
-        dd($data);
+     
         foreach($data as $key => $value){
             if($data['profile_image'] == null || $data['profile_image'] == ''){
                 $data->profile_image = 'profile.png';

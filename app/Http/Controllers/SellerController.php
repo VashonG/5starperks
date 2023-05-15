@@ -147,7 +147,7 @@ class SellerController extends Controller
     public function edit($id)
     {
         $data = User::find($id)->with('views');
-        dd($data);
+        
         foreach($data as $key => $value){
             if($data['profile_image'] == null || $data['profile_image'] == ''){
                 $data->profile_image = 'profile.png';
