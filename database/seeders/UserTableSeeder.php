@@ -2,8 +2,8 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Seeder;
 use App\Models\User;
+use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 
 class UserTableSeeder extends Seeder
@@ -18,7 +18,7 @@ class UserTableSeeder extends Seeder
         User::create(array(
             'name' => 'Admin',
             'email' => 'admin@.com',
-            'password' => Hash::make('12345678')
+            'password' => bcrypt('12345678')
         ));
     }
 }

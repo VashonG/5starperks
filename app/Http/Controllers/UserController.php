@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Models\User;
-use Spatie\Permission\Models\Role;
-use DataTables;
-use Illuminate\Validation\ValidationException;
-use Illuminate\Support\Facades\Hash;
 use DB;
+use DataTables;
+use App\Models\User;
+use Illuminate\Http\Request;
+use Spatie\Permission\Models\Role;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\ValidationException;
 
 class UserController extends Controller
 {
@@ -60,7 +60,7 @@ class UserController extends Controller
             $user = new User();
             $user->name = $request->name;
             $user->email = $request->email;
-            $user->password = Hash::make($request->password);
+            $user->password = bcrypt($request->password);
             $user->assignRole($request->role);
             $user->save();
         }
@@ -119,7 +119,7 @@ class UserController extends Controller
             $user->name = $request->name;
             $user->email = $request->email;
             if($request->password){
-                $user->password = Hash::make($request->password);
+                $user->password = bcrypt($request->password);
             }
             $user->assignRole($request->role);
             

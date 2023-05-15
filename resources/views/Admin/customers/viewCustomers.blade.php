@@ -185,23 +185,80 @@
                         <div role="tabpanel" class="tab-pane active" id="account" aria-labelledby="account-tab" aria-expanded="true">
                             <!-- Project table -->
                             <div class="card">
-                                <h4 class="card-header">User's Projects List</h4>
+                                <h4 class="card-header">Sales List</h4>
                                 <div class="table-responsive">
                                     <table class="table datatable-project">
                                         <thead>
                                             <tr>
                                                 <th></th>
-                                                <th>Project</th>
-                                                <th class="text-nowrap">Total Task</th>
-                                                <th>Progress</th>
-                                                <th>Hours</th>
+                                                <th>User</th>
+                                              
+                                                <th class="text-nowrap">Plan</th>
+                                                <th>Registered At</th>
                                             </tr>
                                         </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>1</td>
+                                                <td>
+                                                     <div class="d-flex justify-content-left align-items-center"> 
+                                                    <div class="avatar-wrapper"> 
+                                                        <div class="avatar me-1">
+                                                        <img src="../../../app-assets/images/portrait/small/avatar-s-7.jpg" alt="Avatar" width="32" height="32" />
+                                                        </div>
+                                                        </div>
+                                                        <div class="d-flex flex-column">
+                                                        <a href="#" class="user_name text-truncate"><span class="fw-bold">
+                                                        Ali Haider
+                                                        </span></a>
+                                                        <small class="emp_post text-muted">@alihaider12
+                                                        </small>
+                                                        </div>
+                                                    </div>
+                                            </td>
+                                         
+                                            <td>
+                                                <span class="d-flex justify-content-center badge bg-light-primary">
+                                                    <span class="mb-0 text-primary">$</span>
+                                                    <sup class="h5 pricing-currency text-primary mt-1 mb-0">99</sup>
+                                                    <sub class="pricing-duration font-small-4 ms-25 mt-auto mb-2">/month</sub>
+                                                </span>
+                                            </td>
+                                            <td>December 12,2023</td>
+                                            </tr>
+                                            <tr>
+                                                <td>2</td>
+                                                <td>
+                                                     <div class="d-flex justify-content-left align-items-center"> 
+                                                    <div class="avatar-wrapper"> 
+                                                        <div class="avatar me-1">
+                                                        <img src="../../../app-assets/images/portrait/small/avatar-s-3.jpg" alt="Avatar" width="32" height="32" />
+                                                        </div>
+                                                        </div>
+                                                        <div class="d-flex flex-column">
+                                                        <a href="#" class="user_name text-truncate"><span class="fw-bold">
+                                                        Ali Badi
+                                                        </span></a>
+                                                        <small class="emp_post text-muted">@aliBadi
+                                                        </small>
+                                                        </div>
+                                                    </div>
+                                            </td>
+                                         
+                                            <td>
+                                                <span class="d-flex justify-content-center badge bg-light-primary">
+                                                    <span class="mb-0 text-primary">$</span>
+                                                    <sup class="h5 pricing-currency text-primary mt-1 mb-0">199</sup>
+                                                    <sub class="pricing-duration font-small-4 ms-25 mt-auto mb-2">/month</sub>
+                                                </span>
+                                            </td>
+                                            <td>December 12,2023</td>
+                                            </tr>
+                                        </tbody>
                                     </table>
                                 </div>
                             </div>
                             <!-- /Project table -->
-
                             <!-- Activity Timeline -->
                             <div class="card">
                                 <h4 class="card-header">User Activity Timeline</h4>
@@ -266,19 +323,49 @@
                             <!-- /Activity Timeline -->
 
                             <!-- Invoice table -->
-                            <div class="card">
-                                <table class="invoice-table table text-nowrap">
-                                    <thead>
-                                        <tr>
-                                            <th></th>
-                                            <th>#ID</th>
-                                            <th><i data-feather="trending-up"></i></th>
-                                            <th>TOTAL Paid</th>
-                                            <th class="text-truncate">Issued Date</th>
-                                            <th class="cell-fit">Actions</th>
-                                        </tr>
-                                    </thead>
-                                </table>
+                             <div class="card">
+                                <h4 class="card-header">Invices</h4>
+                                <div class="table-responsive">
+                                    <table class="table datatable-project">
+                                        <thead>
+                                            <tr>
+                                                <th>Id</th>
+                                                <th class="text-nowrap">Plan</th>
+                                                <th>Source</th>
+                                                <th>Date</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>1</td>
+                                                <td>
+                                                    <span class="d-flex justify-content-center badge bg-light-primary">
+                                                        <span class="mb-0 text-primary">$</span>
+                                                        <sup class="h5 pricing-currency text-primary mt-1 mb-0">99</sup>
+                                                        <sub class="pricing-duration font-small-4 ms-25 mt-auto mb-2">/month</sub>
+                                                    </span>
+                                                </td>
+                                                <td>
+                                                    Stripe
+                                                </td>
+                                                <td>December 12,2023</td>
+                                            </tr>
+                                            <tr>
+                                                <td>2</td>
+                                               
+                                            <td>
+                                                <span class="d-flex justify-content-center badge bg-light-primary">
+                                                    <span class="mb-0 text-primary">$</span>
+                                                    <sup class="h5 pricing-currency text-primary mt-1 mb-0">199</sup>
+                                                    <sub class="pricing-duration font-small-4 ms-25 mt-auto mb-2">/month</sub>
+                                                </span>
+                                            </td>
+                                            <td>Stripe</td>
+                                            <td>December 12,2023</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                             <!-- /Invoice table -->
                         </div>
