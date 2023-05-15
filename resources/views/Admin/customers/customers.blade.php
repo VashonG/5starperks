@@ -760,7 +760,7 @@ console.log(assetPath);
                             '</div>' +
                             '</div>' +
                             '<div class="d-flex flex-column">' +
-                            '<a href="#" class="user_name text-truncate"><span class="fw-bold">' +
+                            '<a href="customers/'+full['id']+'" class="user_name text-truncate"><span class="fw-bold">' +
                             $name +
                             '</span></a>' +
                             '<small class="emp_post text-muted">@' +
