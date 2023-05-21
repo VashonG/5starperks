@@ -119,9 +119,7 @@
 @endsection
 @section('scripts')
     <script src="https://unpkg.com/dropzone@5/dist/min/dropzone.min.js"></script>
-      <!-- BEGIN: Vendor JS-->
-      <script src="{{asset('app-assets/vendors/js/vendors.min.js') }}"></script>
-    <!-- BEGIN Vendor JS-->
+  
     <!-- BEGIN: Theme JS-->
     <script src="{{asset('app-assets/js/core/app-menu.js') }}"></script>
     <script src="{{asset('app-assets/js/core/app.js') }} "></script>

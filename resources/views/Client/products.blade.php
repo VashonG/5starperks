@@ -23,20 +23,10 @@
             <!-- Basic pills starts -->
             <div class="col-xl-12 col-lg-12">
                 <div class="card-body">
-                    <ul class="nav nav-pills">
-                        <li class="nav-item">
-                            <a class="nav-link nav-tab" id="editor-data-tab" data-bs-toggle="pill" aria-expanded="true">Editor Choice</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link nav-tab active" id="peer-data-tab" data-bs-toggle="pill"  aria-expanded="false">Peer Choice</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link nav-tab" id="normal-data-tab" data-bs-toggle="pill"  aria-expanded="false">Normal Products</a>
-                        </li>                                
-                    </ul>
+                   
                 <div class="tab-content">
-                <div role="tabpanel" class="tab-pane" id="editor" aria-labelledby="editor-data-tab" aria-expanded="true">
                 <div id="editor-tab" class="row match-height">
+                    <a class="btn btn-primary w-100 text-center mb-2 mx-1"> Editor Products</a>
                     @if(count($paginatedData["editorProducts"]["items"])==0)
                         <div class="col-md-12 col-lg-12">
                             <div class="card no-data_card">
@@ -59,43 +49,11 @@
                             </p>
                                 <div style="display: flex; flex-direction :row;justify-content:space-between">
                                     <a onclick="viewProduct({{ $product->id }},'{{ $product->link }}')" id="view-histories" class="btn btn-outline-primary">Visit Website</a>
-                                    @if($product->histories->count() > 0 )
-                                    <div class="avatar-group">
-                                        @foreach($product->histories->slice(0,min([$product->histories->count(),3])) as $history)
-                                            @if($history->user->image)
-                                                <div class="avatar pull-up">
-                                                    <div data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="top" title="{{ $history->user->name}}" class="avatar pull-up">
-                                                        <img src="{{$history->user->image}}" alt="Avatar" height="32" width="32" />
-                                                    </div>   
-                                                </div>   
-                                            @else    
-                                                <?php 
-                                                if (strpos($history->user->name, " ") !== false) {
-                                                    $nameList = array_values(array_filter(explode(" ",$history->user->name)));
-                                                    $subName = substr($nameList[0],0,1).substr($nameList[1],0,1);
-                                                }else{
-                                                    $subName = $history->user->name;
-                                                    $subName = substr($subName, 0, 2); 
-                                                }
-                                                $subName =  strtoupper( $subName );
-                                            
-                                                ?>
-                                            <div class="avatar bg-primary">
-                                                <div data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="top" title="{{ $history->user->name}}" class="avatar pull-up">
-                                                            <span class="avatar-content {{ \App\Helpers\randomElementOfArray(['bg-secondary','bg-primary','bg-success','bg-danger','bg-warning','bg-info'])}}">{{ $subName}}</span>
-                                                </div>                            
-                                            </div>
-                                            @endif
-                                        @endforeach
-                                        @if($product->histories->count() > 3 )
-                                            <div class="avatar">
-                                                <div data-bs-toggle="tooltip" data-popup="tooltip-custom"  title="{{ $product->histories->map(function($x,$i) use ($product) { $names = ''; if($i ==0 ){ $name = "<ul>";} $name = '<li>'.$x.'</li>';  if($i == $product->histories->count() ){ $name = "</ul>";}  return $name; })->join("")}}" data-bs-html='true'   class="avatar pull-down">
-                                                    <div class="avatar-content  bg-primary">{{"+".$product->histories->count() - 3}}</div>
-                                                </div>
-                                            </div>
-                                          @endif   
-                                    </div>
-                                    @endif
+                                    <a  data-bs-toggle="tooltip" data-popup="tooltip-custom"  title="{{ $product->histories->map(function($x,$i) use ($product) { $names = ''; if($i ==0 ){ $name = "<ul>";} $name = '<li>'.$x->user->name.'</li>';  if($i == $product->histories->count() ){ $name = "</ul>";}  return $name; })->join("")}}" data-bs-html='true'   class=" pull-down">
+                                        <i style="width:1.2rem;height:2rem" data-feather="eye"></i><span class="histories-count-{{ $product->id }}">  {{$product->histories->count() }} </span>
+                                    </a>
+                                    
+                                  
                                     {{-- <a style="font-size:1.3rem" class="btn btn-default"><i style="height: 1.3rem; width: 1.8rem;" data-feather='activity'></i><span class="histories-count-{{ $product->id }}">  {{ $product->histories && count($product->histories) > 0  ? count($product->histories    ) : 0  }} </span></a> --}}
                                 </div>
                             </div>
@@ -114,9 +72,9 @@
                     @endif
         <!--/ reload button -->
     
-    </div>
-    <div class="tab-pane active" id="peer"  role="tabpanel"  aria-labelledby="peer-data-tab" aria-expanded="false">
+   
     <div id="peer-tab" class="row match-height">
+        <a class="btn btn-primary w-100 text-center mb-2 mx-1"> Peer Products</a>
         @if(count($paginatedData["peerProducts"]["items"])==0)
             <div class="col-md-12 col-lg-12">
                 <div class="card no-data_card">
@@ -147,41 +105,9 @@
                     <div style="display: flex; flex-direction :row;justify-content:space-between">
                         <a onclick="viewProduct({{ $product->id }},'{{ $product->link }}')" id="view-histories" class="btn btn-outline-primary">Visit Website</a>
                         {{-- <a style="font-size:1.3rem" class="btn btn-default"><i style="height: 1.3rem; width: 1.8rem;" data-feather='activity'></i><span class="histories-count-{{ $product->id }}">  {{ $product->histories && count($product->histories) > 0  ? count($product->histories    ) : 0  }} </span></a> --}}
-                        @if($product->histories->count() > 0 )
-                            <div class="avatar-group">
-                                @foreach($product->histories->slice(0,min([$product->histories->count(),3])) as $history)
-                                    @if($history->user->image)
-                                        <div class="avatar pull-up">
-                                            <img src="{{$history->user->image}}" alt="Avatar" height="32" width="32" />
-                                        </div>   
-                                    @else    
-                                        <?php 
-                                        if (strpos($history->user->name, " ") !== false) {
-                                            $nameList = array_values(array_filter(explode(" ",$history->user->name)));
-                                            $subName = substr($nameList[0],0,1).substr($nameList[1],0,1);
-                                        }else{
-                                            $subName = $history->user->name;
-                                            $subName = substr($subName, 0, 2); 
-                                        }
-                                        $subName =  strtoupper( $subName );
-                                    
-                                        ?>
-                                    <div class="avatar bg-primary">
-                                        <div data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="top" title="{{ $history->user->name}}" class="avatar pull-up">
-                                             <span class="avatar-content {{ \App\Helpers\randomElementOfArray(['bg-secondary','bg-primary','bg-success','bg-danger','bg-warning','bg-info'])}}">{{ $subName}}</span>
-                                        </div>                            
-                                    </div>
-                                    @endif
-                                @endforeach
-                                @if($product->histories->count() > 3 )
-                                    <div class="avatar">
-                                        <div data-bs-toggle="tooltip" data-popup="tooltip-custom" title="{{ $product->histories->map(function($x,$i) use ($product) { $names = ''; if($i ==0 ){ $name = "<ul>";} $name = '<li>'.$x->user->name.'</li>';  if($i == $product->histories->count() ){ $name = "</ul>";}  return $name; })->join("")}}" data-bs-html='true'   class="avatar pull-down">
-                                            <div class="avatar-content  bg-primary">{{"+".$product->histories->count() - 3}}</div>
-                                        </div>
-                                    </div>
-                                    @endif   
-                            </div>
-                            @endif
+                        <a  data-bs-toggle="tooltip" data-popup="tooltip-custom"  title="{{ $product->histories->map(function($x,$i) use ($product) { $names = ''; if($i ==0 ){ $name = "<ul>";} $name = '<li>'.$x->user->name.'</li>';  if($i == $product->histories->count() ){ $name = "</ul>";}  return $name; })->join("")}}" data-bs-html='true'   class=" pull-down">
+                            <i style="width:1.2rem;height:2rem" data-feather="eye"></i><span class="histories-count-{{ $product->id }}">  {{$product->histories->count() }} </span>
+                        </a>
                     </div>
                 </div>
             </div>
@@ -199,9 +125,8 @@
         @endif
         <!--/ reload button -->
     
-        </div>
-        <div class="tab-pane" id="normal-data-tab"  role="tabpanel"  aria-labelledby="normal-data-tab" aria-expanded="false">
         <div id="normal-tab" class="row match-height">
+            <a class="btn btn-primary w-100 text-center mb-2 mx-1"> Normal Products</a>
         @if(count($paginatedData["peerProducts"]["items"])==0)
             <div class="col-md-12 col-lg-12">
                 <div class="card no-data_card">
@@ -224,41 +149,9 @@
                     </p>
                         <div style="display: flex; flex-direction :row;justify-content:space-between">
                             <a onclick="viewProduct({{ $product->id }},'{{ $product->link }}')" id="view-histories" class="btn btn-outline-primary">Visit Website</a>
-                            @if($product->histories->count() > 0 )
-                                    <div class="avatar-group">
-                                        @foreach($product->histories->slice(0,min([$product->histories->count(),3])) as $history)
-                                            @if($history->user->image)
-                                                <div class="avatar pull-up">
-                                                    <img src="{{$history->user->image}}" alt="Avatar" height="32" width="32" />
-                                                </div>   
-                                            @else    
-                                                <?php 
-                                                if (strpos($history->user->name, " ") !== false) {
-                                                    $nameList = array_values(array_filter(explode(" ",$history->user->name)));
-                                                    $subName = substr($nameList[0],0,1).substr($nameList[1],0,1);
-                                                }else{
-                                                    $subName = $history->user->name;
-                                                    $subName = substr($subName, 0, 2); 
-                                                }
-                                                $subName =  strtoupper( $subName );
-                                            
-                                                ?>
-                                            <div class="avatar bg-primary">
-                                                <div data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="top" title="{{ $history->user->name}}" class="avatar pull-up">
-                                                    <span class="avatar-content {{ \App\Helpers\randomElementOfArray(['bg-secondary','bg-primary','bg-success','bg-danger','bg-warning','bg-info'])}}">{{ $subName}}</span>
-                                        </div>                            
-                                            </div>
-                                            @endif
-                                        @endforeach
-                                        @if($product->histories->count() > 3 )
-                                            <div class="avatar">
-                                                <div data-bs-toggle="tooltip" data-popup="tooltip-custom" title="{{ $product->histories->map(function($x,$i) use ($product) { $names = ''; if($i ==0 ){ $name = "<ul>";} $name = '<li>'.$x->user->name.'</li>';  if($i == $product->histories->count() ){ $name = "</ul>";}  return $name; })->join("")}}" data-bs-html='true'   class="avatar pull-down">
-                                                    <div class="avatar-content  bg-primary">{{"+".$product->histories->count() - 3}}</div>
-                                                </div>
-                                            </div>
-                                          @endif   
-                                    </div>
-                                    @endif
+                            <a  data-bs-toggle="tooltip" data-popup="tooltip-custom"  title="{{ $product->histories->map(function($x,$i) use ($product) { $names = ''; if($i ==0 ){ $name = "<ul>";} $name = '<li>'.$x->user->name.'</li>';  if($i == $product->histories->count() ){ $name = "</ul>";}  return $name; })->join("")}}" data-bs-html='true'   class=" pull-down">
+                                <i style="width:1.2rem;height:2rem" data-feather="eye"></i><span class="histories-count-{{ $product->id }}">  {{$product->histories->count() }} </span>
+                            </a>
                             {{-- <a style="font-size:1.3rem" class="btn btn-default"><i style="height: 1.3rem; width: 1.8rem;" data-feather='activity'></i><span class="histories-count-{{ $product->id }}">  {{ $product->histories && count($product->histories) > 0  ? count($product->histories    ) : 0  }} </span></a> --}}
                         </div>
                     </div>
@@ -277,7 +170,6 @@
         @endif
         <!--/ reload button -->
     
-                                    </div>
                                     
                                     
                                 </div>
@@ -322,8 +214,13 @@ function loadPaginatedData(type,page){
             break
     }
 
+        let slug = new URL(document.URL).pathname.match(/[^\/]+/g);
+        slug.shift();
+        slug = slug ? slug : [];
+        slug = slug.join('/');
+        console.log("🚀 ~ file: products.blade.php:329 ~ loadPaginatedData ~ slug:", slug)
         $.ajax({
-        url: `{{ url('/products') }}${queryParam}`,
+        url: `{{ url('products').'/${slug}'}}${queryParam}`,
         type: "GET",
         headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')

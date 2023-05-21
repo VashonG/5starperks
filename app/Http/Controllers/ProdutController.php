@@ -32,6 +32,20 @@ class ProdutController extends Controller
         $editorpage = $request->query("editorpage") ? $request->query("editorpage") : null;
         $peerpage = $request->query("peerpage") ? $request->query("peerpage") : null;
         $normalpage = $request->query("normalpage") ? $request->query("normalpage") : null;
+         $paginatedData = $this->getAllProducts($editorpage,$peerpage,$normalpage );
+        if($editorpage || $normalpage || $peerpage){
+            return $paginatedData;
+        }
+        return view('Admin.products.products', compact('paginatedData'));
+    }
+    /**
+     * Fetching all Products.
+     *@param integer $editorpage
+     *@param integer $peerpage
+     *@param integer $normalpage
+     * @return \Illuminate\Support\Collection $paginatedData
+     */
+    public function getAllProducts($editorpage = null,$peerpage = null,$normalpage = null){
         $editorProducts = Product::with(["categories","histories"=> function ($query) {
             return  $query->with("user");
         }])
@@ -62,13 +76,8 @@ class ProdutController extends Controller
                 "items" => $items->items()
             ];
         });
-        if($editorpage || $normalpage || $peerpage){
-            return $paginatedData;
-        }
-        return view('Admin.products.products', compact('paginatedData'));
+        return $paginatedData;
     }
-    
-
     /**
      * Store a newly created resource in storage.
      *
@@ -221,6 +230,16 @@ class ProdutController extends Controller
 
 
     }
+    public function salesList(Request $request){
+        $editorpage = $request->query("editorpage") ? $request->query("editorpage") : null;
+        $peerpage = $request->query("peerpage") ? $request->query("peerpage") : null;
+        $normalpage = $request->query("normalpage") ? $request->query("normalpage") : null;
+         $paginatedData = $this->getAllProducts($editorpage,$peerpage,$normalpage );
+        if($editorpage || $normalpage || $peerpage){
+            return $paginatedData;
+        }
+        return view('Admin.sales.index', compact('paginatedData'));     
+    }
     public function getProducts(Request $request){
         try {
             
@@ -302,4 +321,5 @@ class ProdutController extends Controller
             return ['code' => '200','error_message'=>$th->getMessage()];
         }
     }
+    
 }

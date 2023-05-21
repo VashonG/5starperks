@@ -1,5 +1,5 @@
 @extends('Admin.layouts.master')
-@section('title', 'Products')
+@section('title', 'Sales')
 @section('style')
 <link rel="stylesheet" type="text/css" href={{asset('app-assets/css/plugins/forms/form-valid')}}"tion.css">
 <link rel="stylesheet" type="text/css" href="{{asset('app-assets/css/pages/app-user.css')}}">
@@ -66,8 +66,22 @@
                         <div class="col-xl-12 col-lg-12">
                             
                                 <div class="card-body">
-                                         <div id="editor-tab" class="row match-height">
-                                            <a class="btn btn-primary w-100 text-center mb-2 mx-1"> Editor Products</a>
+                                    <ul class="nav nav-pills">
+                                        <li class="nav-item">
+                                            <a class="nav-link nav-tab" id="editor-data-tab" data-bs-toggle="pill" aria-expanded="true">Editor Choice</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link nav-tab active" id="peer-data-tab" data-bs-toggle="pill"  aria-expanded="false">Peer Choice</a>
+                                        </li>
+                                          <li class="nav-item">
+                                            <a class="nav-link nav-tab" id="normal-data-tab" data-bs-toggle="pill"  aria-expanded="false">Normal Products</a>
+                                        </li>
+                                        
+                                      
+                                    </ul>
+                                    <div class="tab-content">
+                                        <div role="tabpanel" class="tab-pane" id="editor" aria-labelledby="editor-data-tab" aria-expanded="true">
+                                        <div id="editor-tab" class="row match-height">
                                             @if(count($paginatedData["editorProducts"]["items"])==0)
                                             <div class="col-md-12 col-lg-12">
                                                 <div class="card no-data_card">
@@ -103,9 +117,44 @@
                                                         </p>
                                                             <div style="display: flex; flex-direction :row;justify-content:space-between">
                                                                 <a onclick="viewProduct({{ $product->id }},'{{ $product->link }}')" id="view-histories" class="btn btn-outline-primary">Visit Website</a>
-                                                                <a class="waves-effect px-1" data-bs-toggle="modal" onclick="viweHistory({{$product->id}})" data-bs-target="#productClickHistory">
-                                                                    <i style="width:1.2rem;height:2rem" data-feather="eye"></i><span class="histories-count-{{ $product->id }}">  {{$product->histories->count() }} </span>
-                                                                </a>
+                                                                @if($product->histories->count() > 0 )
+                                                                <div class="avatar-group">
+                                                                    @foreach($product->histories->slice(0,min([$product->histories->count(),3])) as $history)
+                                                                        @if($history->user->profile_image)
+                                                                            <div class="avatar pull-up">
+                                                                                <div data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="top" title="Vinnie Mostowy" class="avatar pull-up">
+                                                                                    <img src="{{'/images/profile/user-upload/'.$history->user->profile_image}}" alt="Avatar" height="32" width="32" />
+                                                                                </div>   
+                                                                            </div>   
+                                                                        @else    
+                                                                            <?php 
+                                                                            
+                                                                            if (strpos($history->user->name, " ") !== false) {
+                                                                                $subNameParsed = array_values(array_filter(explode("  ",$history->user->name)));
+                                                                                $subName = substr(trim($subNameParsed[0]),0,1).substr(trim($subNameParsed[1]),0,1);
+                                                                        
+                                                                            }else{
+                                                                                $subName = $history->user->name;
+                                                                                $subName = substr($subName, 0, 2); 
+                                                                            }
+                                                                            $subName =  strtoupper( $subName );
+                                                                            ?>
+                                                                        <div class="avatar bg-primary">
+                                                                            <div data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="top" title="{{ $history->user->name}}" class="avatar pull-up">
+                                                                                <span class="avatar-content {{ \App\Helpers\randomElementOfArray(['bg-secondary','bg-primary','bg-success','bg-danger','bg-warning','bg-info'])}}">{{ $subName}}</span>
+                                                                            </div>
+                                                                        </div>
+                                                                        @endif
+                                                                    @endforeach
+                                                                    @if($product->histories->count() > 3 )
+                                                                        <div class="avatar ">
+                                                                            <a  data-bs-toggle="modal" onclick="viweHistory({{$product->id}})" data-bs-target="#productClickHistory">
+                                                                                <div class="avatar-content bg-primary">{{"+".$product->histories->count() - 3}}</div>
+                                                                            </a>
+                                                                        </div>
+                                                                    @endif   
+                                                                </div>
+                                                                @endif
                                                                 {{-- <a style="font-size:1.3rem" class="btn btn-default"><i style="height: 1.3rem; width: 1.8rem;" data-feather='activity'></i><span class="histories-count-{{ $product->id }}">  {{ $product->histories && count($product->histories) > 0  ? count($product->histories    ) : 0  }} </span></a> --}}
                                                             </div>
                                                         </div>
@@ -124,57 +173,92 @@
                                         @endif
                                         <!--/ reload button -->
 
-                                           
-                                        <div id="peer-tab" class="row match-height">
-                                            <a class="btn btn-primary w-100 text-center mb-2 mx-1"> Peer Products</a>
-                                            @if(count($paginatedData["peerProducts"]["items"])==0)
-                                                <div class="col-md-12 col-lg-12">
-                                                    <div class="card no-data_card">
-                                                        <div class="nodata">
-                                                            <i data-feather='hard-drive'></i>
-                                                            <p>No Data</p>  
-                                                        </div>
-                                                    </div>
+                                              </div>
+                                        <div class="tab-pane active" id="peer"  role="tabpanel"  aria-labelledby="peer-data-tab" aria-expanded="false">
+            <div id="peer-tab" class="row match-height">
+           
+                @if(count($paginatedData["peerProducts"]["items"])==0)
+                    <div class="col-md-12 col-lg-12">
+                        <div class="card no-data_card">
+                            <div class="nodata">
+                                <i data-feather='hard-drive'></i>
+                                <p>No Data</p>  
+                            </div>
+                        </div>
+                    </div>
+                @else
+                    @foreach($paginatedData["peerProducts"]["items"] as $product)
+                    <div class="col-md-6 col-lg-4">
+                        <div class="card">
+                            <img class="card-img-top"  src="{{ $product->image }}" alt="Card image cap" />
+                            <div class="card-body">
+                                <div class="card-img-overlay">
+                                    <button class="btn btn-outline-danger text-nowrap px-1 waves-effect" style="float: right;" product_id="{{ $product->id}}"  onclick="deleteProduct(<?=  $product->id; ?>)" type="button">
+                                        <i data-feather='trash-2'></i>
+                                    </button>
+                                </div>
+                            @if (!empty($product->scheduled_at) && $product->scheduled_at > now())
+                                <div style="float:right;" class="bg-info-gradient d-flex">
+                                    <i style="margin-right: 10px; height: 1.4rem; color: #1aeaff; width: 2rem;" data-feather='clock'></i>
+                                    <p class="card-text text-dark">{{  date("d-m-Y", strtotime($product->scheduled_at)) }}</p>
+                                </div>
+                                    @else
+                                    <p class="card-text text-white"></p>
+                                    @endif
+                                <h4 class="card-title">{{ $product->title }}</h4>
+                                <p class="card-text" >
+                                {{ strlen($product->description) > 120 ? substr($product->description, 0, 120)."..." : $product->description }}   
+                            </p>
+                                <div style="display: flex; flex-direction :row;justify-content:space-between">
+                                    <a onclick="viewProduct({{ $product->id }},'{{ $product->link }}')" id="view-histories" class="btn btn-outline-primary">Visit Website</a>
+                                    @if($product->histories->count() > 0 )
+                                    <div class="avatar-group">
+                                        @foreach($product->histories->slice(0,min([$product->histories->count(),3])) as $history)
+                                            @if($history->user->profile_image)
+                                                <div class="avatar pull-up">
+                                                    <div data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="top" title="{{ $history->user->name}}" class="avatar pull-up">
+                                                        <img src="{{'/images/profile/user-upload/'.$history->user->profile_image}}" alt="Avatar" height="32" width="32" />
+                                                    </div>   
+                                                </div>   
+                                            @else    
+                                                <?php 
+                                                if (strpos($history->user->name, " ") !== false) {
+                                                    $subNameParsed = array_values(array_filter(explode("  ",$history->user->name)));
+                                                    $subName = substr(trim($subNameParsed[0]),0,1).substr(trim($subNameParsed[1]),0,1);
+                                                }else{
+                                                    $subName = $history->user->name;
+                                                    $subName = substr($subName, 0, 2); 
+                                                }
+                                                $subName =  strtoupper( $subName );
+                                            
+                                                ?>
+                                            <div class="avatar bg-primary">
+                                                <div data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="top" title="{{ $history->user->name}}" class="avatar pull-up">
+                                                    <span class="avatar-content {{ \App\Helpers\randomElementOfArray(['bg-secondary','bg-primary','bg-success','bg-danger','bg-warning','bg-info'])}}">{{ $subName}}</span>
                                                 </div>
-                                            @else
-                                                @foreach($paginatedData["peerProducts"]["items"] as $product)
-                                                <div class="col-md-6 col-lg-4">
-                                                    <div class="card">
-                                                        <img class="card-img-top"  src="{{ $product->image }}" alt="Card image cap" />
-                                                        <div class="card-body">
-                                                            <div class="card-img-overlay">
-                                                                <button class="btn btn-outline-danger text-nowrap px-1 waves-effect" style="float: right;" product_id="{{ $product->id}}"  onclick="deleteProduct(<?=  $product->id; ?>)" type="button">
-                                                                    <i data-feather='trash-2'></i>
-                                                                </button>
-                                                            </div>
-                                                        @if (!empty($product->scheduled_at) && $product->scheduled_at > now())
-                                                            <div style="float:right;" class="bg-info-gradient d-flex">
-                                                                <i style="margin-right: 10px; height: 1.4rem; color: #1aeaff; width: 2rem;" data-feather='clock'></i>
-                                                                <p class="card-text text-dark">{{  date("d-m-Y", strtotime($product->scheduled_at)) }}</p>
-                                                            </div>
-                                                                @else
-                                                                <p class="card-text text-white"></p>
-                                                                @endif
-                                                            <h4 class="card-title">{{ $product->title }}</h4>
-                                                            <p class="card-text" >
-                                                            {{ strlen($product->description) > 120 ? substr($product->description, 0, 120)."..." : $product->description }}   
-                                                        </p>
-                                                            <div style="display: flex; flex-direction :row;justify-content:space-between">
-                                                                <a onclick="viewProduct({{ $product->id }},'{{ $product->link }}')" id="view-histories" class="btn btn-outline-primary">Visit Website</a>
-                                                                <a class="waves-effect px-1" data-bs-toggle="modal" onclick="viweHistory({{$product->id}})" data-bs-target="#productClickHistory">
-                                                                    <i style="width:1.2rem;height:2rem" data-feather="eye"></i><span class="histories-count-{{ $product->id }}">  {{$product->histories->count() }} </span>
-                                                                </a>
-                                                            
-                                                                {{-- <a style="font-size:1.3rem" class="btn btn-default"><i style="height: 1.3rem; width: 1.8rem;" data-feather='activity'></i><span class="histories-count-{{ $product->id }}">  {{ $product->histories && count($product->histories) > 0  ? count($product->histories    ) : 0  }} </span></a> --}}
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                @endforeach
+                                             </div>
                                             @endif
-                                        </div>
+                                        @endforeach
+                                        @if($product->histories->count() > 3 )
+                                            <div class="avatar ">
+                                                <a  data-bs-toggle="modal" onclick="viweHistory({{$product->id}})" data-bs-target="#productClickHistory">
+                                                    <div class="avatar-content bg-primary">{{"+".$product->histories->count() - 3}}</div>
+                                                </a>
+                                            </div>
+                                          @endif   
+                                    </div>
+                                    @endif
+                                   
+                                    {{-- <a style="font-size:1.3rem" class="btn btn-default"><i style="height: 1.3rem; width: 1.8rem;" data-feather='activity'></i><span class="histories-count-{{ $product->id }}">  {{ $product->histories && count($product->histories) > 0  ? count($product->histories    ) : 0  }} </span></a> --}}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    @endforeach
+                @endif
+            </div>
          <!-- reload button -->
-                                        @if($paginatedData["peerProducts"]["last_page"] >$paginatedData["peerProducts"]["current_page"] )
+         @if($paginatedData["peerProducts"]["last_page"] >$paginatedData["peerProducts"]["current_page"] )
             <div class="row">
                 <div class="col-12 text-center">
                     <button type="button" class="btn btn-lg btn-primary block-element border-0 mb-1 load_peer" onclick="loadPaginatedData('peer',{{ $paginatedData['peerProducts']['current_page'] }})">Load More</button>
@@ -183,77 +267,104 @@
             @endif
             <!--/ reload button -->
 
-       
-                                        <div id="normal-tab" class="row match-height">
-                                            <a class="btn btn-primary w-100 text-center mb-2 mx-1"> Normal Products</a>
-                                            @if(count($paginatedData["normalProducts"]["items"]) == 0)
-                                            <div class="col-md-12 col-lg-12">
-                                                <div class="card no-data_card">
-                                                    <div class="nodata">
-                                                        <i data-feather='hard-drive'></i>
-                                                        <p>No Data</p>  
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            @else
-                                        @foreach($paginatedData["normalProducts"]["items"] as $product)
-                                                <div class="col-md-6 col-lg-4">
-                                                    <div class="card">
-                                                        <img class="card-img-top"  src="{{ $product->image }}" alt="Card image cap" />
-                                                        <div class="card-body">
-                                                            <div class="card-img-overlay">
-                                                                <button class="btn btn-outline-danger text-nowrap px-1 waves-effect" style="float: right;" product_id="{{ $product->id}}"  onclick="deleteProduct(<?=  $product->id; ?>)" type="button">
-                                                                    <i data-feather='trash-2'></i>
-                                                                </button>
-                                                            </div>
-                                                        @if (!empty($product->scheduled_at) && $product->scheduled_at > now())
-                                                            <div style="float:right;" class="bg-info-gradient d-flex">
-                                                                <i style="margin-right: 10px; height: 1.4rem; color: #1aeaff; width: 2rem;" data-feather='clock'></i>
-                                                                <p class="card-text text-dark">{{  date("d-m-Y", strtotime($product->scheduled_at)) }}</p>
-                                                            </div>
-                                                                @else
-                                                                <p class="card-text text-white"></p>
-                                                                @endif
-                                                            <h4 class="card-title">{{ $product->title }}</h4>
-                                                            <p class="card-text" >
-                                                            {{ strlen($product->description) > 120 ? substr($product->description, 0, 120)."..." : $product->description }}   
-                                                        </p>
-                                                            <div style="display: flex; flex-direction :row;justify-content:space-between">
-                                                                <a onclick="viewProduct({{ $product->id }},'{{ $product->link }}')" id="view-histories" class="btn btn-outline-primary">Visit Website</a>
-                                                                   
-                                                                        <a class="waves-effect px-1" data-bs-toggle="modal" onclick="viweHistory({{$product->id}})" data-bs-target="#productClickHistory">
-                                                                                <i style="width:1.2rem;height:2rem" data-feather="eye"></i><span class="histories-count-{{ $product->id }}">  {{$product->histories->count() }} </span>
-                                                                        </a>
-                                                                   
-                                                                            {{-- <div class="avatar ">
-                                                                                <a  data-bs-toggle="modal" onclick="viweHistory({{$product->id}})" data-bs-target="#productClickHistory">
-                                                                                    <div class="avatar-content bg-primary">{{"+".$product->histories->count() - 3}}</div>
-                                                                                </a> --}}
-                                                                            {{-- </div> --}}
-                                                                           
-                                                                   
-                                                                    
-                                                                {{-- <a style="font-size:1.3rem" class="btn btn-default"><i style="height: 1.3rem; width: 1.8rem;" data-feather='activity'></i><span class="histories-count-{{ $product->id }}">  {{ $product->histories && count($product->histories) > 0  ? count($product->histories    ) : 0  }} </span></a> --}}
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            @endforeach
-                                            @endif
                                         </div>
-                                        <!-- reload button -->
-                                        @if($paginatedData["normalProducts"]["last_page"] >$paginatedData["normalProducts"]["current_page"] )
-                                            <div class="row">
-                                                <div class="col-12 text-center">
-                                                    <button type="button" class="btn btn-lg btn-primary block-element border-0 mb-1 load_normal" onclick="loadPaginatedData('normal',{{ $paginatedData['normalProducts']['current_page'] }})">Load More</button>
+                                        <div class="tab-pane" id="normal-data-tab"  role="tabpanel"  aria-labelledby="normal-data-tab" aria-expanded="false">
+        <div id="normal-tab" class="row match-height">
+           
+            @if(count($paginatedData["normalProducts"]["items"]) == 0)
+            <div class="col-md-12 col-lg-12">
+                <div class="card no-data_card">
+                    <div class="nodata">
+                        <i data-feather='hard-drive'></i>
+                        <p>No Data</p>  
+                    </div>
+                </div>
+            </div>
+            @else
+           @foreach($paginatedData["normalProducts"]["items"] as $product)
+                <div class="col-md-6 col-lg-4">
+                    <div class="card">
+                        <img class="card-img-top"  src="{{ $product->image }}" alt="Card image cap" />
+                        <div class="card-body">
+                            <div class="card-img-overlay">
+                                <button class="btn btn-outline-danger text-nowrap px-1 waves-effect" style="float: right;" product_id="{{ $product->id}}"  onclick="deleteProduct(<?=  $product->id; ?>)" type="button">
+                                    <i data-feather='trash-2'></i>
+                                </button>
+                            </div>
+                        @if (!empty($product->scheduled_at) && $product->scheduled_at > now())
+                            <div style="float:right;" class="bg-info-gradient d-flex">
+                                <i style="margin-right: 10px; height: 1.4rem; color: #1aeaff; width: 2rem;" data-feather='clock'></i>
+                                <p class="card-text text-dark">{{  date("d-m-Y", strtotime($product->scheduled_at)) }}</p>
+                            </div>
+                                @else
+                                <p class="card-text text-white"></p>
+                                @endif
+                            <h4 class="card-title">{{ $product->title }}</h4>
+                            <p class="card-text" >
+                            {{ strlen($product->description) > 120 ? substr($product->description, 0, 120)."..." : $product->description }}   
+                        </p>
+                            <div style="display: flex; flex-direction :row;justify-content:space-between">
+                                <a onclick="viewProduct({{ $product->id }},'{{ $product->link }}')" id="view-histories" class="btn btn-outline-primary">Visit Website</a>
+                                @if($product->histories->count() > 0 )
+                                    <div class="avatar-group">
+                                        @foreach($product->histories->slice(0,min([$product->histories->count(),3])) as $history)
+                                            @if($history->user->profile_image)
+                                                <div class="avatar pull-up">
+                                                    <div data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="top" title="{{ $history->user->name}}" class="avatar pull-up">
+                                                        <img src="{{'/images/profile/user-upload/'.$history->user->profile_image}}" alt="Avatar" height="32" width="32" />
+                                                    </div>   
+                                                </div>   
+                                            @else    
+                                                <?php 
+                                                if (strpos($history->user->name, " ") !== false) {
+                                                    $subNameParsed = array_values(array_filter(explode("  ",$history->user->name)));
+                                                    $subName = substr(trim($subNameParsed[0]),0,1).substr(trim($subNameParsed[1]),0,1);
+                                               
+                                                }else{
+                                                    $subName = $history->user->name;
+                                                    $subName = substr($subName, 0, 2); 
+                                                }
+                                                $subName =  strtoupper( $subName );
+                                            
+                                                ?>
+                                            <div class="avatar ">
+                                                <div data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="top" title="{{ $history->user->name}}" class="avatar pull-up">
+                                                    <span class="avatar-content {{ \App\Helpers\randomElementOfArray(['bg-secondary','bg-primary','bg-success','bg-danger','bg-warning','bg-info'])}}">{{ $subName}}</span>
                                                 </div>
                                             </div>
                                             @endif
-                                            <!--/ reload button -->
+                                        @endforeach
+                                        @if($product->histories->count() > 3 )
+                                            <div class="avatar ">
+                                                <a  data-bs-toggle="modal" onclick="viweHistory({{$product->id}})" data-bs-target="#productClickHistory">
+                                                    <div class="avatar-content bg-primary">{{"+".$product->histories->count() - 3}}</div>
+                                                </a>
+                                            </div>
+                                            @endif   
+                                    </div>
+                                    @endif
+                                {{-- <a style="font-size:1.3rem" class="btn btn-default"><i style="height: 1.3rem; width: 1.8rem;" data-feather='activity'></i><span class="histories-count-{{ $product->id }}">  {{ $product->histories && count($product->histories) > 0  ? count($product->histories    ) : 0  }} </span></a> --}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            @endforeach
+            @endif
+        </div>
+         <!-- reload button -->
+         @if($paginatedData["normalProducts"]["last_page"] >$paginatedData["normalProducts"]["current_page"] )
+            <div class="row">
+                <div class="col-12 text-center">
+                    <button type="button" class="btn btn-lg btn-primary block-element border-0 mb-1 load_normal" onclick="loadPaginatedData('normal',{{ $paginatedData['normalProducts']['current_page'] }})">Load More</button>
+                </div>
+            </div>
+            @endif
+            <!--/ reload button -->
 
+                                        </div>
                                        
                                        
-                                 
+                                    </div>
                                 </div>
                                 </div>
                        
@@ -317,6 +428,7 @@
     function viweHistory(productId){
         let products = @json($paginatedData["normalProducts"]["items"]);
         productHistory= products.find(x=>x.id == productId).histories;
+        
        let html = '';
         $("#product-history-data").html(html);
         $("#productClickHistoryTitle").text(products.find(x=>x.id == productId).title + " Click History");
@@ -324,7 +436,7 @@
             console.log("🚀 ~ file: products.blade.php:419 ~ viweHistory ~ productHistory =>x:", x);
             html += '<tr>';
             html += '<td>';
-             let output = x?.user?.profile_image && x?.user?.profile_image != '' ? ` <img src="/images/profile/user-upload/${x?.user?.profile_image}" alt="Avatar" height="32" width="32" />` : x.user.name.split(" ").filter(x=>!!x).map(x=>x[0]).join("");
+             let output = x?.user?.profile_image && x?.user?.profile_image != '' ? ` <img src="/images/profile/user-upload/${x?.user?.profile_image}" alt="Avatar" height="32" width="32" />` : x.user.name ;
                let username = x.user.username ?  x.user.username : x.user.name.split(" ").join("_");
              html += '<div class="d-flex justify-content-left align-items-center">' +
                     '<div class="avatar-wrapper">' +
@@ -416,7 +528,7 @@
                         paginateCard += '<div class="card-body">';
                         paginateCard += '<div class="card-img-overlay">';
                         paginateCard += `<button class="btn btn-outline-danger text-nowrap px-1 waves-effect" style="float: right;" product_id="${x.id}"  onclick="deleteProduct(${x.id})" type="button">`;
-                        paginateCard += `<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash-2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>`;
+                        paginateCard += `<i data-feather='trash-2'></i>`;
                         paginateCard += '</button>';
                         paginateCard += '</div>';
                     
@@ -430,9 +542,8 @@
                         paginateCard += x.description && x.description.length > 120 ? x.description.substring(0, 120) + "..." : x.description;
                         paginateCard += ' </p>';
                         paginateCard += '  <div style="display: flex; flex-direction :row;justify-content:space-between">';
-                        paginateCard += `<a onclick="viewProduct(${x.id},'${x.link}')" id="view-histories" class="btn btn-outline-primary waves-effect">Visit Website</a>`;
-                        paginateCard += `<a class="waves-effect px-1" data-bs-toggle="modal" onclick="viweHistory(${x.id})" data-bs-target="#productClickHistory">`;  
-                        paginateCard += `<svg style="height:2rem;width:1.2rem" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-eye"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg><span class=" mx-2 histories-count-${x.id}">${x.histories.length}</span></a>`;
+                        paginateCard += `<a onclick="viewProduct(${x.id},${x.link})" id="view-histories" class="btn btn-outline-primary">Visit Website</a>`;
+                        paginateCard += `<a style="font-size:1.3rem" class="btn btn-default"><i style="height: 1.3rem; width: 1.8rem;" data-feather='activity'></i><span class="histories-count-${x.id}"> ${x.histories  ? x.histories.length : 0 }  </span></a>`;
                         paginateCard += '</div></div></div></div>';
                         let load_button_identefier = "load_editor";
                         switch(type){

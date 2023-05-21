@@ -63,8 +63,8 @@
         </li>
     @endcan
     @can('sales')
-        <li class="nav-item {{ \Route::getFacadeRoot()->current()->uri() == 'sales' ? 'active' : '' }}">
-            <a  class="d-flex align-items-center"  href="{{url('sales')}}">
+        <li class="nav-item {{ \Route::getFacadeRoot()->current()->uri() == 'products-sales' ? 'active' : '' }}">
+            <a  class="d-flex align-items-center"  href="{{url('products-sales')}}">
                 <i data-feather="trending-up"></i>
                 <span class="menu-item text-truncate" data-i18n="Sales">Sales</span>
             </a>

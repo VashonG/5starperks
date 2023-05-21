@@ -56,6 +56,7 @@ Route::group(['middleware' => ['permission:dashboard']], function () {
 
     // ProdutController
     Route::resource('products', ProdutController::class);
+    Route::get('products-sales', 'ProdutController@salesList')->name('products-sales');
     
     // ProdutController
      Route::get('addProduct', 'ProdutController@addProduct');
