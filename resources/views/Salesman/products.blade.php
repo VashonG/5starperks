@@ -52,8 +52,6 @@
                                     <a  data-bs-toggle="tooltip" data-popup="tooltip-custom"  title="{{ $product->histories->map(function($x,$i) use ($product) { $names = ''; if($i ==0 ){ $name = "<ul>";} $name = '<li>'.$x->user->name.'</li>';  if($i == $product->histories->count() ){ $name = "</ul>";}  return $name; })->join("")}}" data-bs-html='true'   class=" pull-down">
                                         <i style="width:1.2rem;height:2rem" data-feather="eye"></i><span class="histories-count-{{ $product->id }}">  {{$product->histories->count() }} </span>
                                     </a>
-                                    
-                                  
                                     {{-- <a style="font-size:1.3rem" class="btn btn-default"><i style="height: 1.3rem; width: 1.8rem;" data-feather='activity'></i><span class="histories-count-{{ $product->id }}">  {{ $product->histories && count($product->histories) > 0  ? count($product->histories    ) : 0  }} </span></a> --}}
                                 </div>
                             </div>
@@ -265,8 +263,27 @@ function loadPaginatedData(type,page){
                         paginateCard += x.description && x.description.length > 120 ? x.description.substring(0, 120) + "..." : x.description;
                         paginateCard += ' </p>';
                         paginateCard += '  <div style="display: flex; flex-direction :row;justify-content:space-between">';
-                        paginateCard += `<a onclick="viewProduct(${x.id},${x.link})" id="view-histories" class="btn btn-outline-primary">Visit Website</a>`;
-                        paginateCard += `<a style="font-size:1.3rem" class="btn btn-default"><i style="height: 1.3rem; width: 1.8rem;" data-feather='activity'></i><span class="histories-count-${x.id}"> ${x.histories  ? x.histories.length : 0 }  </span></a>`;
+                        paginateCard += `<a onclick="viewProduct(${x.id},'${x.link}')" id="view-histories" class="btn btn-outline-primary">Visit Website</a>`;
+                        console.log("🚀 ~ file: products.blade.php:279 ~ users ~ users:", x.histories)
+                      
+                        let users = x.histories.map((item, i) => {
+                        console.log("🚀 ~ file: products.blade.php:268 ~ users ~ item:", item);
+                        let name = '';
+                        if (item === 0) {
+                            name += '<ul>';
+                        }
+                        name += '<li>' + item.user.name + '</li>';
+                        if (i === x.histories.length - 1) {
+                            name += '</ul>';
+                        }
+                        return name;
+                        }).join(''); 
+                        console.log("🚀 ~ file: products.blade.php:279 ~ users ~ users:", users)
+                       
+                        paginateCard += `<a  data-bs-toggle="tooltip" data-popup="tooltip-custom"  title="${users}" data-bs-html='true'   class=" pull-down">`;
+                        paginateCard += `<svg style="height:2rem;width:1.2rem" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-eye"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg><span class=" mx-2 histories-count-${x.id}">${x.histories.length}</span></a>`;
+                       
+                        // paginateCard += `<a style="font-size:1.3rem" class="btn btn-default"><i style="height: 1.3rem; width: 1.8rem;" data-feather='activity'></i><span class="histories-count-${x.id}"> ${x.histories  ? x.histories.length : 0 }  </span></a>`;
                         paginateCard += '</div></div></div></div>';
                         let load_button_identefier = "load_editor";
                         switch(type){
