@@ -3,12 +3,17 @@
 namespace App\Http\Controllers;
 
 
-use DB;
+
 use DataTables;
 use App\Models\User;
+use App\Models\Comment;
+use App\Models\Aggreament;
+use App\Models\Announcement;
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 use Spatie\Permission\Models\Role;
 use App\Http\Controllers\Throwable;
+use Illuminate\Support\Facades\DB ;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
 
@@ -126,8 +131,36 @@ class CustomersController extends Controller
             if($data->username == null || $data->username == ''){
                 $data->username = strtolower(str_replace(' ', '_',  $data["name"]));
             }
-        
-        return view('Admin.customers.viewCustomers',compact('data'));
+          
+        $announcemts = DB::table('announcements')
+        ->orderBy('updated_at', 'desc')
+        ->get();
+        $comments = Comment::join('users','comments.user_id','=','users.id')
+        ->select('comments.*','users.name','users.profile_image')->get();
+        foreach ($announcemts as $key => $value) {
+            $announcemts[$key]->comments = [];
+            foreach ($comments as $key2 => $value2) {
+                if($value2->post_id == $value->id){
+                    $announcemts[$key]->comments[] = $value2;
+                }
+            }
+        }
+      
+        $announcemts = $announcemts->filter(function($value)  use ($id) {
+            return (new Collection($value->comments))->filter(function($q) use ($id){
+              return  $q->user_id == $id;
+            })->count() > 0;
+        });
+       
+    
+        $agreements = Aggreament::whereHas('contracts',function ($query) use ($id) {
+            $query->where('user_id', $id);
+        })->with('contracts',function ($query ) use ($id)
+        {
+            return $query->where('user_id', $id)->first();
+        })->get();
+           
+        return view('Admin.customers.viewCustomers',compact('data','announcemts','agreements'));
     }
 
     /**

@@ -43,6 +43,7 @@ class AnnouncementsController extends Controller
                 }
             }
         }
+        
         if (Auth::user()->hasRole('Salesman')) {
         return view('Salesman.announcements',compact('announcments'));
         }

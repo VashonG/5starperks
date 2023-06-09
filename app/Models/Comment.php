@@ -2,24 +2,26 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 
 class Comment extends Model
 {
     protected $fillable = [
-        'body'
+        'body',
+        "post_id",
+        "user_id"
     ];
 
     public function user()
     {
-        $this->belongsTo('App\Models\User');
+        $this->belongsTo(User::class,"user_id");
     }
 
     public function anouncement()
     {
-        $this->belongsTo('App\Models\Announcement');
+        $this->belongsTo(Announcement::class,"post_id");
     }
 }
 

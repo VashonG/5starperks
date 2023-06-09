@@ -183,6 +183,14 @@
                     <!--/ User Pills -->
                     <div class="tab-content">
                         <div role="tabpanel" class="tab-pane active" id="account" aria-labelledby="account-tab" aria-expanded="true">
+                            <div class="card">
+                                <h4 class="card-header">
+                                    About
+                                </h4>
+                                <div class="card-body">
+                                    <p>{{ $data->bio }}</p>
+                                </div>
+                            </div>
                             <!-- Project table -->
                             <div class="card">
                                 <h4 class="card-header">Sales List</h4>
@@ -580,8 +588,102 @@
                                 <!--/ Billing Address -->
                         </div>         
                         <div role="tabpanel" class="tab-pane " id="feed" aria-labelledby="feed-tab" aria-expanded="true">
+                            @foreach ($announcemts as $post)
+                            <!-- post 1 -->
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-start align-items-center mb-1">
+                                        <!-- avatar -->
+                                        <div class="avatar me-1">
+                                            <img src="{{asset('/images/portrait/small/avatar-s-11.jpg')}}" alt="avatar img" height="50" width="50" />
+                                        </div>
+                                        <!--/ avatar -->
+                                        <div class="profile-user-info">
+                                            <h6 class="mb-0">Admin</h6>
+                                            <small class="text-muted">{{ date("d M, Y H:i ", strtotime($post->created_at)) }}</small>
+                                        </div>
+                                    </div>
+                                    <p class="card-text">
+                                        {{ $post->description}}
+                                    </p>
+                                    @if(isset($post->image) && $post->image != null && $post->image != '')
+                                    <!-- post img -->
+                                    <img style="display: flex; justify-content: center; align-items: center;max-height:500px " class="img-fluid rounded mb-75" src="{{ (strpos($post->image,'http') === 0 || strpos($post->image,'https') === 0)? $post->image:'/images/announcements/'.$post->image}}" alt="Announcemnts" />
+                                    <!--/ post img -->
+                                    @endif
+                
+                                            <!-- Comment -->
+                                            @if(isset($post->comments) && $post->comments != null && $post->comments != '')
+                                    @foreach($post->comments as $comment)
+                                    <div class="d-flex align-items-start mb-1">
+                                                            <div class="avatar mt-25 me-75">
+                
+                
+                                                                @if(  $comment["profile_image"] != null &&  $comment["profile_image"] != '')
+                                                            <img src="{{ '../../../../images/profile/user-upload/'. $comment['profile_image']   }}" alt="Avatar" height="34" width="34" />
+                                                               @else
+                                                               <?php
+                                                                       $stateNum = rand(1,6);
+                                                                       $states = ['success', 'danger', 'warning', 'info', 'dark', 'primary', 'secondary'];
+                                                                       $state = $states[$stateNum] ;
+                                                                        $name =  $comment->name ;
+                                                                        $initials = array_values(array_filter(explode(" ", $name),function($x){
+                                                                            return $x != '' ;
+                                                                        }));
+                                                                 
+                                                                        $nameIdentifier = (($initials[0])?$initials[0][0]:'').((isset($initials[1])?$initials[1][0]:''));
+                                                                 
+                                                                        $initials = $nameIdentifier ;
+                                                                ?>
+                                                                <span class="avatar-content"> {{ $initials }} </span>
+                                                                @endif
+                
+                                                            </div>
+                                                            <div class="profile-user-info w-100">
+                                                                <div class="d-flex align-items-center ">
+                                                                    <h6 class="mb-0">{{  ($comment->name)?$comment->name:""  }}</h6>
+                                                                    <small class="text-left mx-1 text-muted">{{ date("d M, Y H:i ", strtotime($comment->created_at)) }}</small>
+                                                                </div>
+                                                                <small>{{ ($comment->body)?$comment->body:"" }}</small>
+                                                            </div>
+                                                        </div>
+                                    @endforeach
+                                    @endif
+                                                        <!--/ comments -->
+                <div post-id="{{ 'postid-'.$post->id}}">
+                                                        <!-- comment box -->
+                                                        <fieldset class="mb-75">
+                                                            <label class="form-label" for="label-textarea">Add Comment</label>
+                                                            <textarea class="form-control" id="label-textarea" rows="3" placeholder="Add Comment"></textarea>
+                                                        </fieldset>
+                                                        <!--/ comment box -->
+                                                        <button type="button" onClick="postComment(this)" class="btn btn-sm btn-primary">Post Comment</button>
+                                </div>
+                                </div>
+                            </div>
+                            <!--/ post 1 -->
+                        @endforeach
                         </div>
                         <div role="tabpanel" class="tab-pane " id="agreements" aria-labelledby="agreements-tab" aria-expanded="true">
+                            @foreach ($agreements as $agreement)
+                            <div class="col-md-12">
+                                <div class="card">
+                                    <div class="card-header">
+                                    <h3>{{ $agreement->title }}</h3>
+                                    </div>
+                                    <div class="card-body">
+                                    {!! $agreement->body !!}
+                                    </div>
+                                    <div class="signature">
+                                   
+                                        @if($agreement->contracts[0]->sign_image != null || $agreement->contracts[0]->sign_image != '')
+                                            <img src="{!! $agreement->contracts[0]->sign_image !!}" />
+                                        @endif
+                                      
+                                    </div>
+                                </div>
+                                </div>
+                            @endforeach 
                         </div>
                 </div>
                 <!--/ User Content -->

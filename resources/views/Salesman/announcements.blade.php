@@ -47,7 +47,10 @@
                                                        $states = ['success', 'danger', 'warning', 'info', 'dark', 'primary', 'secondary'];
                                                        $state = $states[$stateNum] ;
                                                         $name =  $comment->name ;
-                                                        $initials = explode(" ", $name);
+                                                        $initials = array_values(array_filter(explode(" ", $name),function($x){
+                                                            return $x != '' ;
+                                                        }));
+                                                  
                                                         $nameIdentifier = (($initials[0])?$initials[0][0]:'').((isset($initials[1])?$initials[1][0]:''));
                                                        $initials = strtoupper($nameIdentifier);
                                                 ?>

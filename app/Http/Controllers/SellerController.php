@@ -2,14 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use DB;
+
 use DataTables;
 use App\Models\User;
+use App\Models\Comment;
 use App\Models\Company;
 use App\Models\Ownership;
+use App\Models\Aggreament;
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 use Spatie\Permission\Models\Role;
 use App\Http\Controllers\Throwable;
+use Illuminate\Support\Facades\DB ;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
@@ -125,16 +129,47 @@ class SellerController extends Controller
      */
     public function show($id)
     {
-        $data = User::find($id);
-        foreach($data as $key => $value){
-            if($data['profile_image'] == null || $data['profile_image'] == ''){
+      
+        $data = User::with(["views"=>function($q){
+            $q->with("product");
+        }])->find($id) ;
+       
+            if($data->profile_image == null || $data->profile_image == ''){
                 $data->profile_image = 'profile.png';
             }
-            if($data['username'] == null || $data['username'] == ''){
+            if($data->username == null || $data->username == ''){
                 $data->username = strtolower(str_replace(' ', '_',  $data["name"]));
             }
+          
+        $announcemts = DB::table('announcements')
+        ->orderBy('updated_at', 'desc')
+        ->get();
+        $comments = Comment::join('users','comments.user_id','=','users.id')
+        ->select('comments.*','users.name','users.profile_image')->get();
+        foreach ($announcemts as $key => $value) {
+            $announcemts[$key]->comments = [];
+            foreach ($comments as $key2 => $value2) {
+                if($value2->post_id == $value->id){
+                    $announcemts[$key]->comments[] = $value2;
+                }
+            }
         }
-        return view('Admin.salesman.viewsalesman',compact('data'));
+      
+        $announcemts = $announcemts->filter(function($value)  use ($id) {
+            return (new Collection($value->comments))->filter(function($q) use ($id){
+              return  $q->user_id == $id;
+            })->count() > 0;
+        });
+       
+    
+        $agreements = Aggreament::whereHas('contracts',function ($query) use ($id) {
+            $query->where('user_id', $id);
+        })->with('contracts',function ($query ) use ($id)
+        {
+            return $query->where('user_id', $id)->first();
+        })->get();
+           
+        return view('Admin.salesman.viewsalesman',compact('data','announcemts','agreements'));
 
     }
 
