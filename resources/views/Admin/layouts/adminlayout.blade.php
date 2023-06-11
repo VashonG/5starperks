@@ -11,8 +11,8 @@
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
         <title>@yield('title')</title>
-        <link rel="shortcut icon" type="image/x-icon" href="images/logo/favicon.ico">
-
+        <link rel="apple-touch-icon" href="{{asset('app-assets/images/ico/apple-icon-120.png')}}">
+        <link rel="shortcut icon" type="image/x-icon" href="{{asset('images/logo/logo.png')}}">
         {{-- Include core + vendor Styles --}}
         @include('panels/styles')
 
