@@ -76,13 +76,21 @@
                                             <input type="text" id="basic-default-email" name="email" class="form-control" placeholder="abc@email.com" />
                                     </div>
                                     <div class="mb-1">
-                                            <label class="form-label" for="basic-default-password">Password</label>
-                                            <input type="password" id="basic-default-password" name="password" class="form-control" placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;" />
+                                        <label class="form-label" for="password">Password</label>
+                                        <div class="input-group input-group-merge form-password-toggle">
+                                            <input type="password" class="form-control form-control-merge" id="password" name="password" tabindex="1" placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;" aria-describedby="password" />
+                                            <span class="input-group-text cursor-pointer"><i data-feather="eye"></i></span>
+                                        </div> 
                                     </div>
                                     <div class="mb-1">
-                                            <label class="form-label" for="confirm-password">Confirm Password</label>
-                                            <input type="password" id="confirm-password" name="password_confirmation" class="form-control" placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;" />
+                                        <label class="form-label" for="confirm-password">Confirm Password</label>
+                                        <div class="input-group input-group-merge form-password-toggle mb-1">
+                                            <input type="password" class="form-control form-control-merge" id="confirm-password" name="password_confirmation" tabindex="2" placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;" aria-describedby="Confirm Password" />
+                                            <span class="input-group-text cursor-pointer"><i data-feather="eye"></i></span>
+                                        </div>
                                     </div>
+                             
+                            
                                     <input type="hidden" name="role" value="3" />
                                 <div class="mb-1">
                                         <div class="form-check">
@@ -117,7 +125,9 @@
     <!-- BEGIN: Vendor JS-->
     <script src="../../../app-assets/vendors/js/vendors.min.js"></script>
     <!-- BEGIN Vendor JS-->
-
+    <!-- BEGIN: App JS-->
+    <script src="../../../app-assets/js/core/app.min.js"></script>
+    <!-- BEGIN App JS-->
     <!-- BEGIN: Page Vendor JS-->
     <script src="../../../app-assets/vendors/js/forms/validation/jquery.validate.min.js"></script>
     <!-- END: Page Vendor JS-->
